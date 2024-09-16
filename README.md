@@ -16,10 +16,10 @@ Se você já ouviu um "Óia só", "Bota" ou "Vixe", você já está no caminho c
 
 ### 🔍 Funcionalidades
 
-🖥️ **Código Simples e Coloidal:** Com palavras como "bota", "se não", e "toma", programar fica mais fácil e divertido.
-🎉 **Mensagens de Erro Divertidas:** Receba feedback humorístico quando algo der errado no seu código.
-🛠️ **Funções Práticas:** Crie funções simples e objetivas usando a palavra "aruma".
-🔁 **Loops em Estilo Caipira:** Use o comando "repete" para loops e mantenha tudo organizado.
+- 🖥️ **Código Simples e Coloidal:** Com palavras como "bota", "se não", e "toma", programar fica mais fácil e divertido.
+- 🎉 **Mensagens de Erro Divertidas:** Receba feedback humorístico quando algo der errado no seu código.
+- 🛠️ **Funções Práticas:** Crie funções simples e objetivas usando a palavra "aruma".
+- 🔁 **Loops em Estilo Caipira:** Use o comando "repete" para loops e mantenha tudo organizado.
 
 ## 📌 Ajustes e melhorias
 
