@@ -14,7 +14,7 @@ Se você já ouviu um "Óia só", "Bota" ou "Vixe", você já está no caminho c
 
 > Desafie-se e experimente programar com sotaque do interior!
 
-### 🔍 Funcionalidades
+## 🔍 Funcionalidades
 
 - 🖥️ **Código Simples e Coloidal:** Com palavras como "bota", "se não", e "toma", programar fica mais fácil e divertido.
 - 🎉 **Mensagens de Erro Divertidas:** Receba feedback humorístico quando algo der errado no seu código.
