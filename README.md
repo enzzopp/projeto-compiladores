@@ -73,9 +73,6 @@ Agradecemos às seguintes pessoas que trabalharam neste projeto:
         </sub>
       </a>
     </td>
-  </tr>
-
-  <tr>
     <td align="center">
       <a href="https://github.com/jvgoverna">
         <img src="https://avatars.githubusercontent.com/u/105528242?v=4" width="100px;"/><br>
