@@ -74,6 +74,17 @@ Agradecemos às seguintes pessoas que trabalharam neste projeto:
       </a>
     </td>
   </tr>
+
+  <tr>
+    <td align="center">
+      <a href="https://github.com/jvgoverna">
+        <img src="https://avatars.githubusercontent.com/u/105528242?v=4" width="100px;"/><br>
+        <sub>
+          <b>João Vitor Governatore</b>
+        </sub>
+      </a>
+    </td>
+  </tr>
 </table>
 
 ## 📝 Licença
