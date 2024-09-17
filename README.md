@@ -6,7 +6,7 @@
 
 ## 📜 Sobre o Projeto
 
-A CaipsLang é uma linguagem de programação descomplicada e cheia de personalidade, que usa o bom e velho "caipirês" para facilitar a vida dos programadores. Aqui, você não precisa de termos técnicos complicados — a programação é feita na linguagem do interior, com expressões simples, diretas e cheias de humor.
+A <> é uma linguagem de programação descomplicada e cheia de personalidade, que usa o bom e velho "caipirês" para facilitar a vida dos programadores. Aqui, você não precisa de termos técnicos complicados — a programação é feita na linguagem do interior, com expressões simples, diretas e cheias de humor.
 
 Se você já ouviu um "Óia só", "Bota" ou "Vixe", você já está no caminho certo para programar em CaipsLang! Prepare-se para um jeito novo e divertido de aprender e escrever código.
 
@@ -35,7 +35,7 @@ Antes de começar, verifique se você atendeu aos seguintes requisitos:
 - Você tem uma máquina `<Windows / Linux / Mac>`. Indique qual sistema operacional é compatível / não compatível.
 - Você leu `<guia / link / documentação_relacionada_ao_projeto>`.
 
-## 🚀 Instalando o CaipsLang
+## 🚀 Instalando a <>
 
 Para instalar o CaipsLang, siga estas etapas:
 
@@ -51,7 +51,7 @@ Windows:
 <comando_de_instalação>
 ```
 
-## ☕ Usando o CaipsLang
+## ☕ Usando a <>
 
 Para usar o Home Broker SoyTrade, siga estas etapas:
 
