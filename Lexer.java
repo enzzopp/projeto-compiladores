@@ -12,6 +12,7 @@ public class Lexer {
         tokens = new ArrayList<>();
         afds = new ArrayList<>();
         this.code = new StringCharacterIterator(code);
+        
         afds.add(new MathOperator());
         afds.add(new Number());
         afds.add(new Identifier());

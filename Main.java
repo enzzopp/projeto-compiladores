@@ -7,8 +7,10 @@ public class Main {
         // Token t2 = new Token("NUM","234");
 
         List<Token> tokens;
-        String code = "2 + 2 + 2";
-        Lexer lexer = new Lexer(code);
+        FileSettings f1 = new FileSettings("ggdr");
+        f1.read();
+        Lexer lexer = new Lexer(f1.getCode());
+        System.out.println(f1.countLines());
         tokens = lexer.getTokens();
 
         for (Token t: tokens){

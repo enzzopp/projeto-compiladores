@@ -21,6 +21,10 @@ public class MathOperator extends AFD{
                 code.next();
                 return new Token("DIV", "/");
 
+            case '=' :
+                code.next();
+                return new Token("EQUAL", "=");
+
             case '(' :
                 code.next();
                 return new Token("AP", "(");
