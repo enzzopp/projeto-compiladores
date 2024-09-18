@@ -1,6 +1,4 @@
-
 import java.util.List;
-
 import Compiller.Lexical.Code;
 import Compiller.Lexical.Lexer;
 import Compiller.Lexical.Token;
@@ -12,11 +10,9 @@ public class Main {
         // Token t2 = new Token("NUM","234");
 
         List<Token> tokens;
-        String path = "resources/code.txt";
+        String path = "resources/code.du";
 
         Code f1 = new Code(path);
-
-        System.out.println(f1.countLines());
 
         Lexer lexer = new Lexer(f1.getCodeString());
 

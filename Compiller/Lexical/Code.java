@@ -19,8 +19,7 @@ public class Code {
             String codeAux = "";
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
-                codeAux += line + '\n';
-                System.out.println(scanner.hasNextLine() + line);
+                codeAux += codeAux == "" ? line : '\n' + line;
             }
             // return codeAux.substring(0, codeAux.length() - 1)
             return codeAux;

@@ -15,7 +15,9 @@ public class Lexer {
         this.code = new StringCharacterIterator(code);
         
         afds.add(new MathOperator());
-        afds.add(new Number());
+        afds.add(new Delimiter());
+        afds.add(new Integer());
+        afds.add(new Float());
         afds.add(new Reserved());
         afds.add(new Identifier());
 

@@ -8,16 +8,19 @@ public class Reserved extends AFD{
     private static final Set<String> RESERVED_WORDS = new HashSet<>();
 
     static {
-        RESERVED_WORDS.add("int");
-        RESERVED_WORDS.add("float");
-        RESERVED_WORDS.add("double");
-        RESERVED_WORDS.add("char");
-        RESERVED_WORDS.add("void");
-        RESERVED_WORDS.add("if");
-        RESERVED_WORDS.add("else");
-        RESERVED_WORDS.add("for");
-        RESERVED_WORDS.add("while");
-        RESERVED_WORDS.add("return");
+        RESERVED_WORDS.add("cheio");
+        RESERVED_WORDS.add("quebrado");
+        RESERVED_WORDS.add("escrita");
+        RESERVED_WORDS.add("boi");
+        RESERVED_WORDS.add("real");
+        RESERVED_WORDS.add("barça");
+        RESERVED_WORDS.add("roda");
+        RESERVED_WORDS.add("vaiqueva");
+        RESERVED_WORDS.add("cpa");
+        RESERVED_WORDS.add("cnao");
+        RESERVED_WORDS.add("ecpa"); // else if
+        RESERVED_WORDS.add("oia"); //output
+        RESERVED_WORDS.add("bota"); //input
     }
 
     @Override
@@ -56,6 +59,7 @@ public class Reserved extends AFD{
         code.current() == '/' || 
         code.current() == '(' || 
         code.current() == ')' || 
+        code.current() == ';' ||
         code.current() == '\n'||
         code.current() == CharacterIterator.DONE;
     }
