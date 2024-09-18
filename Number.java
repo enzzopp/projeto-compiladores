@@ -17,8 +17,13 @@ public class Number extends AFD {
 
     private String readNumber(CharacterIterator code){
         String number = "";
+        while (Character.isDigit(code.current()) || code.current() == '.'){
 
-        while (Character.isDigit(code.current())){
+            if (code.current() == '.'){ //encontrou o numero
+                if (number.contains(".")){ //se a string ja tem ponto anteriormente
+                    throw new RuntimeException("Error: Invalid number: " + number + code.current());
+                }
+            }
             number += code.current();
             code.next();
         }
