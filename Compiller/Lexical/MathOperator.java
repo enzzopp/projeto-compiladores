@@ -1,4 +1,4 @@
-
+package Compiller.Lexical;
 import java.text.CharacterIterator;
 
 public class MathOperator extends AFD{
@@ -27,11 +27,11 @@ public class MathOperator extends AFD{
 
             case '(' :
                 code.next();
-                return new Token("AP", "(");
+                return new Token("OP", "(");
 
             case ')' :
                 code.next();
-                return new Token("FP", ")");
+                return new Token("CP", ")");
 
             default:
                 return null;

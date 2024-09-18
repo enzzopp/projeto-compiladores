@@ -1,3 +1,4 @@
+package Compiller.Lexical;
 import java.text.CharacterIterator;
 
 public class Number extends AFD {

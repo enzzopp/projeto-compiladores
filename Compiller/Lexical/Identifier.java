@@ -1,3 +1,4 @@
+package Compiller.Lexical;
 import java.text.CharacterIterator;
 
 public class Identifier extends AFD{
@@ -8,10 +9,10 @@ public class Identifier extends AFD{
         boolean isFirstLetter = Character.isLetter(code.current());
 
         if(isFirstLetter){
-            String letter = readLetter(code);
+            String word = readLetter(code);
 
             if(endletter(code)){
-                return new Token("ID", letter);
+                return new Token("ID", word);
             }
         }
         return null;

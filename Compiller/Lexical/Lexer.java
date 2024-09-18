@@ -1,3 +1,4 @@
+package Compiller.Lexical;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ public class Lexer {
         
         afds.add(new MathOperator());
         afds.add(new Number());
+        afds.add(new Reserved());
         afds.add(new Identifier());
 
     }
