@@ -4,13 +4,13 @@ import java.text.CharacterIterator;
 public class Float extends AFD {
 
     @Override
-    public Token evaluate(CharacterIterator code) {
+    public Token evaluate(CharacterIterator code, int line) {
 
         if (Character.isDigit(code.current()) || code.current() == '.'){
             String number = readNumber(code);
 
-            if (endNumber(code)){
-                return new Token("FLOAT", number);
+            if (endNumber(code) && !number.equals(".")){
+                return new Token("FLOAT", number, line);
             }
         }
         return null;
@@ -19,28 +19,16 @@ public class Float extends AFD {
         String number = "";
 
         while (Character.isDigit(code.current()) || code.current() == '.'){
+
             if (code.current() == '.' && number.contains(".")){
-                throw new RuntimeException("Error: Invalid number: " + number + code.current());
+                return null;
             }
+
             number += code.current();
             code.next();
         }
         return number;
     }
-    // private String readNumber(CharacterIterator code){
-    //     String number = "";
-    //     while (Character.isDigit(code.current()) || code.current() == '.'){
-
-    //         if (code.current() == '.'){ //encontrou o numero
-    //             if (number.contains(".")){ //se a string ja tem ponto anteriormente
-    //                 throw new RuntimeException("Error: Invalid number: " + number + code.current());
-    //             }
-    //         }
-    //         number += code.current();
-    //         code.next();
-    //     }
-    //     return number;
-    // }
 
     private boolean endNumber(CharacterIterator code){
         return 

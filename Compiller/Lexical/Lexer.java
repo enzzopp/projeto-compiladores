@@ -20,7 +20,30 @@ public class Lexer {
         afds.add(new Float());
         afds.add(new Reserved());
         afds.add(new Identifier());
+        afds.add(new LexicError());
 
+    }
+
+    public boolean hasErrorTokens(){
+        for (Token token : tokens) {
+            if ("ERR".equals(token.getType())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public String getTokensErrorMessage(){
+        String message = "";
+        for (Token token : tokens) {
+            if ("ERR".equals(token.getType())) {
+                String msgErrToken = String.format("\n\nLexical Error: Token not recognized: '%s'\n\t at line %s%d\u001B[0m",
+                "\u001B[31m" + token.getLexeme() + "\u001B[0m", "\u001B[33m", token.getLine());
+
+                message += msgErrToken + "\n";
+            }
+        }
+        return message;
     }
 
     public void skipWhitespaces() {
@@ -29,20 +52,39 @@ public class Lexer {
         }
     }
 
+    private int getTokenLineFromPos(int pos) {
+
+        int line = 1;
+        code.setIndex(0);
+
+        for (int i = 0; i < pos; i++) {
+            
+            if (code.current() == '\n'){
+                line++;
+            }
+            code.next();
+        }
+        code.setIndex(pos);
+        return line;
+    }
+
     public List<Token> getTokens(){
-        boolean accept;
+        boolean isCriticalError;
+        int pos = 0;
+        int line = 0;
 
         while (code.current() != CharacterIterator.DONE) {
-            accept = false;
+            isCriticalError = true;
             skipWhitespaces();
             
             if (code.current() == CharacterIterator.DONE) break;
 
             for (AFD afd : afds) {
-                int pos = code.getIndex();
-                Token t = afd.evaluate(code);
+                pos = code.getIndex();
+                line = getTokenLineFromPos(pos);
+                Token t = afd.evaluate(code, line);
                 if (t != null) {
-                    accept = true;
+                    isCriticalError = false;
                     tokens.add(t);
                     break;
                 } 
@@ -50,9 +92,16 @@ public class Lexer {
                     code.setIndex(pos);
                 }
             }  
-            if (accept) continue;
-            throw new RuntimeException("Error: Token not recognized: " + code.current());
+            if (!isCriticalError) continue;
+
+            throw new RuntimeException("Critical error: Token not recognized: " + code.current() + " at line " + line);
+            
         }
+
+        if (hasErrorTokens()){
+            throw new RuntimeException(getTokensErrorMessage());
+        }
+
         tokens.add(new Token("EOF", "$"));
         return tokens;
     }

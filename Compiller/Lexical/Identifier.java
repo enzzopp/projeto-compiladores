@@ -4,7 +4,7 @@ import java.text.CharacterIterator;
 public class Identifier extends AFD{
 
     @Override
-    public Token evaluate(CharacterIterator code){
+    public Token evaluate(CharacterIterator code, int line){
 
         boolean isFirstLetter = Character.isLetter(code.current());
 
@@ -12,7 +12,7 @@ public class Identifier extends AFD{
             String word = readLetter(code);
 
             if(endletter(code)){
-                return new Token("ID", word);
+                return new Token("ID", word, line);
             }
         }
         return null;

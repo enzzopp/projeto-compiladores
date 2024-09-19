@@ -8,23 +8,23 @@ public class Reserved extends AFD{
     private static final Set<String> RESERVED_WORDS = new HashSet<>();
 
     static {
-        RESERVED_WORDS.add("cheio");
-        RESERVED_WORDS.add("quebrado");
-        RESERVED_WORDS.add("escrita");
-        RESERVED_WORDS.add("boi");
-        RESERVED_WORDS.add("real");
-        RESERVED_WORDS.add("barça");
-        RESERVED_WORDS.add("roda");
-        RESERVED_WORDS.add("vaiqueva");
-        RESERVED_WORDS.add("cpa");
-        RESERVED_WORDS.add("cnao");
-        RESERVED_WORDS.add("ecpa"); // else if
+        RESERVED_WORDS.add("cheio"); // int
+        RESERVED_WORDS.add("quebrado"); //float
+        RESERVED_WORDS.add("escrita"); //String
+        RESERVED_WORDS.add("boi"); //boolean
+        RESERVED_WORDS.add("real"); //true
+        RESERVED_WORDS.add("barça"); //false
+        RESERVED_WORDS.add("roda"); //for
+        RESERVED_WORDS.add("vaiqueva"); // while
+        RESERVED_WORDS.add("cpa"); //if
+        RESERVED_WORDS.add("cnao"); //else
+        RESERVED_WORDS.add("ecpa"); //else if
         RESERVED_WORDS.add("oia"); //output
         RESERVED_WORDS.add("bota"); //input
     }
 
     @Override
-    public Token evaluate(CharacterIterator code){
+    public Token evaluate(CharacterIterator code, int line){
 
         boolean isFirstLetter = Character.isLetter(code.current());
 
@@ -32,7 +32,7 @@ public class Reserved extends AFD{
             String word = readLetter(code);
 
             if(endletter(code) && RESERVED_WORDS.contains(word)){
-                return new Token("RESERVED", word);
+                return new Token("RESERVED", word, line);
             }
         }
         return null;
@@ -40,14 +40,14 @@ public class Reserved extends AFD{
 
     private String readLetter(CharacterIterator code){
 
-        String id = "";
+        String word = "";
         
         while(Character.isLetter(code.current()) || Character.isDigit(code.current()) || code.current() == '_'){
 
-            id += code.current();
+            word += code.current();
             code.next();
         }
-        return id;
+        return word;
     }
 
     private boolean endletter(CharacterIterator code){

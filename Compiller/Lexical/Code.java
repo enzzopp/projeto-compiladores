@@ -40,7 +40,7 @@ public class Code {
         }
         return contador;
     }
-            
+        
     public String getPath() {
         return path;
     }

@@ -1,32 +1,29 @@
 package Compiller.Lexical;
 import java.text.CharacterIterator;
 
-public class Integer extends AFD {
+public class LexicError extends AFD {
 
     @Override
     public Token evaluate(CharacterIterator code, int line) {
 
-        if (Character.isDigit(code.current())){
-            String number = readNumber(code);
+        String word = readError(code);
 
-            if (endNumber(code)){
-                return new Token("INT", number, line);
-            }
+        if (endError(code)){
+            return new Token("ERR", word, line);
         }
         return null;
     }
+    private String readError(CharacterIterator code){
+        String word = "";
 
-    private String readNumber(CharacterIterator code){
-        String number = "";
-
-        while (Character.isDigit(code.current()) && code.current() != '.'){
-            number += code.current();
+        while (!endError(code)){
+            word += code.current();
             code.next();
         }
-        return number;
+        return word;
     }
 
-    private boolean endNumber(CharacterIterator code){
+    private boolean endError(CharacterIterator code){
         return 
         code.current() == ' ' ||
         code.current() == '+' ||
