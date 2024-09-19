@@ -20,7 +20,7 @@ public class Lexer {
         afds.add(new Float());
         afds.add(new Reserved());
         afds.add(new Identifier());
-        afds.add(new LexicError());
+        afds.add(new LexicalError());
 
     }
 

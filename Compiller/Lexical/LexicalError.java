@@ -1,7 +1,7 @@
 package Compiller.Lexical;
 import java.text.CharacterIterator;
 
-public class LexicError extends AFD {
+public class LexicalError extends AFD {
 
     @Override
     public Token evaluate(CharacterIterator code, int line) {
