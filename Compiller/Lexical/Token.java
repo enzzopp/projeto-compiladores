@@ -11,11 +11,6 @@ public class Token {
         this.lexeme = lexeme;
         this.line = line;
     }
-    
-    public Token(String type, String lexeme) {
-        this.type = type;
-        this.lexeme = lexeme;
-    }
 
     public String getType() {
         return type;

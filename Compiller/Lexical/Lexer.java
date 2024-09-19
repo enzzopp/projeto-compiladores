@@ -101,8 +101,8 @@ public class Lexer {
         if (hasErrorTokens()){
             throw new RuntimeException(getTokensErrorMessage());
         }
-
-        tokens.add(new Token("EOF", "$"));
+        System.out.println(getTokenLineFromPos(pos));
+        tokens.add(new Token("EOF", "$", getTokenLineFromPos(pos)));
         return tokens;
     }
 }
