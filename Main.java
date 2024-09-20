@@ -1,7 +1,7 @@
 import java.util.List;
-import Compiller.Lexical.Code;
-import Compiller.Lexical.Lexer;
-import Compiller.Lexical.Token;
+import Compiller.Lexic.Code;
+import Compiller.Lexic.Lexer;
+import Compiller.Lexic.Token;
 
 public class Main {
     public static void main(String[] args) {
