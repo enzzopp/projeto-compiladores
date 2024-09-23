@@ -8,7 +8,7 @@ public class Delimiter extends AFD {
         switch(code.current()){
             case ';' :
                 code.next();
-                return new Token("ENDL", ";", line);
+                return new Token("EOI", ";", line);
             case '{' :
                 code.next();
                 return new Token("OB", "{", line);

@@ -20,7 +20,7 @@ public class Reserved extends AFD{
         RESERVED_WORDS.add("cnao"); //else
         RESERVED_WORDS.add("ecpa"); //else if
         RESERVED_WORDS.add("oia"); //output
-        RESERVED_WORDS.add("bota"); //input
+        RESERVED_WORDS.add("toma"); //input
     }
 
     @Override
