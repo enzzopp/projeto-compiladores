@@ -10,8 +10,8 @@ public class Reserved extends AFD{
     static {
         RESERVED_WORDS.add("cheio"); // int
         RESERVED_WORDS.add("quebrado"); //float
-        RESERVED_WORDS.add("escrita"); //String
-        RESERVED_WORDS.add("boi"); //boolean
+        RESERVED_WORDS.add("texto"); //String
+        RESERVED_WORDS.add("boo"); //boolean
         RESERVED_WORDS.add("real"); //true
         RESERVED_WORDS.add("barça"); //false
         RESERVED_WORDS.add("roda"); //for

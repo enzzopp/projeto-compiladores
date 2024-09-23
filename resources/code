@@ -1,9 +1,13 @@
 cheio resultado eh 10;
-quebrado valor eh 15.8
+quebrado valor eh 15.8;
 
-texto nome = "meu nome é fulano"
+texto nome = "meu nome é fulano";
+texto sobrenome = toma();
 
-
+vaiqueva i ate i <= 10 {
+    oia "bom dia";
+    i eh i + 1;
+}
 
 roda i de 0 ate 10 de 1 em 1 {
     se i % 2 == 0 cpa {

@@ -7,7 +7,7 @@ public class Main {
     public static void main(String[] args) {
 
         List<Token> tokens;
-        String path = "resources/code.du";
+        String path = "resources/code";
 
         Code f1 = new Code(path);
 
