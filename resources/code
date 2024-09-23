@@ -1,0 +1,15 @@
+cheio resultado eh 10;
+quebrado valor eh 15.8
+
+texto nome = "meu nome é fulano"
+
+
+
+roda i de 0 ate 10 de 1 em 1 {
+    se i % 2 == 0 cpa {
+        fala "hello world!";
+    }
+    cnao {
+        fala "erro";
+    }
+}

@@ -1,7 +1,0 @@
-roda (cheio i = 0; i <= 10; i++ ){
-    cpa (i % 2 == 0){
-        oia("hello world!");
-    }
-}
-
-3 .4
