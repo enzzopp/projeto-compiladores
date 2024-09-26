@@ -1,19 +1,22 @@
-cheio resultado eh 10;
+cheio{} resultado eh 10;
 quebrado valor eh 15.8;
 
-texto nome = "meu nome é fulano";
-texto sobrenome = toma();
+texto nome eh "meu nome é fulano";
+texto sobrenome eh toma();
 
 vaiqueva i ate i <= 10 {
     oia "bom dia";
     i eh i + 1;
 }
-
+f~~fe
 roda i de 0 ate 10 de 1 em 1 {
     se i % 2 == 0 cpa {
-        fala "hello world!";
+        fala "divide por 2";
+    }
+    ese i % 3 == 0 cpa {
+        fala "divide por 3"
     }
     cnao {
-        fala "erro";
+        fala "sobra resto";
     }
 }
