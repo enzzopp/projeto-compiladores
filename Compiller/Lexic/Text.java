@@ -18,6 +18,7 @@ public class Text extends AFD {
 
     private String readLexeme(CharacterIterator code) {
         String lexeme = "";
+
         
         // Adiciona a primeira aspa dupla
         lexeme += code.current();

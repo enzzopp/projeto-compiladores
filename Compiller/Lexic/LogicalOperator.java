@@ -43,7 +43,7 @@ public class LogicalOperator extends AFD {
                     code.next();
                     return new Token("EQUAL", "==", line);
                 }
-                return new Token("ASSIGN", "=", line);
+                return null;
             default:
                 return null;
         }

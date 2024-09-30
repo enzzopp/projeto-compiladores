@@ -23,7 +23,6 @@ public class Lexer {
         afds.add(new Identifier());
         afds.add(new Text());
         afds.add(new LexicalError());
-
     }
 
     public boolean hasErrorTokens(){
@@ -88,7 +87,7 @@ public class Lexer {
                     isCriticalError = false;
                     tokens.add(t);
                     break;
-                } 
+                }
                 else {
                     code.setIndex(pos);
                 }

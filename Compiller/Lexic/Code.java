@@ -1,7 +1,10 @@
 package Compiller.Lexic;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 public class Code {
@@ -15,15 +18,16 @@ public class Code {
     }
     
     public String getCodeString() {
-        try (Scanner scanner = new Scanner(new File(path))) {
-            String codeAux = "";
+        try (Scanner scanner = new Scanner(new InputStreamReader(new FileInputStream(new File(path)), StandardCharsets.UTF_8))) {
+            StringBuilder codeAux = new StringBuilder();
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
-                codeAux += codeAux == "" ? line : '\n' + line;
+                if (codeAux.length() > 0) {
+                    codeAux.append('\n');
+                }
+                codeAux.append(line);
             }
-            // return codeAux.substring(0, codeAux.length() - 1)
-            return codeAux;
-            
+            return codeAux.toString();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return null;

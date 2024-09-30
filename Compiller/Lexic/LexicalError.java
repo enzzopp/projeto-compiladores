@@ -20,6 +20,12 @@ public class LexicalError extends AFD {
             lexeme += code.current();
             code.next();
         }
+
+        if (lexeme.length() == 0){
+            code.next();
+            return null;
+        }
+
         return lexeme;
     }
 
@@ -31,8 +37,12 @@ public class LexicalError extends AFD {
         code.current() == '*' || 
         code.current() == '/' || 
         code.current() == '(' || 
-        code.current() == ')' || 
+        code.current() == ')' ||
+        code.current() == '}' || 
+        code.current() == '{' ||  
         code.current() == ';' ||
+        code.current() == '\n' ||
+        code.current() == '"' ||
         code.current() == CharacterIterator.DONE;
     }
 }

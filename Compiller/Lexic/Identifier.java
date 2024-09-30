@@ -36,7 +36,9 @@ public class Identifier extends AFD{
         code.current() == '*' || 
         code.current() == '/' || 
         code.current() == '(' || 
-        code.current() == ')' || 
+        code.current() == ')' ||
+        code.current() == '}' || 
+        code.current() == '{' ||  
         code.current() == ';' ||
         code.current() == '\n'||
         code.current() == '"' ||
