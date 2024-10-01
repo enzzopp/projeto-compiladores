@@ -2,6 +2,7 @@ import java.util.List;
 import Compiller.Lexic.Code;
 import Compiller.Lexic.Lexer;
 import Compiller.Lexic.Token;
+import Compiller.Syntactic.Parser;
 
 public class Main {
     public static void main(String[] args) {
@@ -15,8 +16,12 @@ public class Main {
 
         tokens = lexer.getTokens();
 
-        for (Token t: tokens){
-            System.out.println(t);
+        for (Token token : tokens) {
+            System.out.println(token);
         }
+
+        Parser parser = new Parser(tokens);
+
+        parser.analyze();
     }
 }
