@@ -20,8 +20,8 @@ public class Main {
             System.out.println(token);
         }
 
-        Parser parser = new Parser(tokens);
+        // Parser parser = new Parser(tokens);
 
-        parser.analyze();
+        // parser.analyze();
     }
 }

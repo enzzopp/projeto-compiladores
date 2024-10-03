@@ -6,9 +6,10 @@ public class LexicalError extends AFD {
     @Override
     public Token evaluate(CharacterIterator code, int line) {
 
+        
         String lexeme = readError(code);
 
-        if (endError(code)){
+        if (endError(code) && lexeme.length() != 0){
             return new Token("ERR", lexeme, line);
         }
         return null;
@@ -21,28 +22,13 @@ public class LexicalError extends AFD {
             code.next();
         }
 
-        if (lexeme.length() == 0){
-            code.next();
-            return null;
-        }
-
         return lexeme;
     }
 
     private boolean endError(CharacterIterator code){
         return 
         code.current() == ' ' ||
-        code.current() == '+' ||
-        code.current() == '-' || 
-        code.current() == '*' || 
-        code.current() == '/' || 
-        code.current() == '(' || 
-        code.current() == ')' ||
-        code.current() == '}' || 
-        code.current() == '{' ||  
-        code.current() == ';' ||
-        code.current() == '\n' ||
-        code.current() == '"' ||
+        code.current() == '\n'||
         code.current() == CharacterIterator.DONE;
     }
 }
