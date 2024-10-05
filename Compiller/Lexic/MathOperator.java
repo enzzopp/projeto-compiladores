@@ -31,14 +31,6 @@ public class MathOperator extends AFD{
             case ')' :
                 code.next();
                 return new Token("CP", ")", line);
-
-            case 'e' :
-                code.next();
-                if(code.current() == 'h'){
-                    code.next();
-                    return new Token("ASSIGN", "eh", line);
-                }
-                return null;
             default:
                 return null;
         }

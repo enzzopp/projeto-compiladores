@@ -1,1 +1,4 @@
-se soma > 5 cpa soma eh 0 cnao soma eh 2
+se x >= 10 {
+    x = 9
+    out
+}

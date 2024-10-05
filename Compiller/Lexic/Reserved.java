@@ -8,19 +8,19 @@ public class Reserved extends AFD{
     private static final Set<String> RESERVED_WORDS = new HashSet<>();
 
     static {
-        RESERVED_WORDS.add("cheio"); // int
-        RESERVED_WORDS.add("quebrado"); //float
+        RESERVED_WORDS.add("inteiro"); // int
+        RESERVED_WORDS.add("decimal"); //float
         RESERVED_WORDS.add("texto"); //String
-        RESERVED_WORDS.add("boo"); //boolean
+        RESERVED_WORDS.add("estado"); //boolean
         RESERVED_WORDS.add("real"); //true
         RESERVED_WORDS.add("barça"); //false
-        RESERVED_WORDS.add("roda"); //for
-        RESERVED_WORDS.add("vaiqueva"); // while
-        RESERVED_WORDS.add("cpa"); //if
-        RESERVED_WORDS.add("cnao"); //else
-        RESERVED_WORDS.add("ecpa"); //else if
-        RESERVED_WORDS.add("oia"); //output
-        RESERVED_WORDS.add("toma"); //input
+        RESERVED_WORDS.add("para"); //for
+        RESERVED_WORDS.add("enquanto"); // while
+        RESERVED_WORDS.add("se"); //if
+        RESERVED_WORDS.add("senao"); //else
+        RESERVED_WORDS.add("ou"); //else if
+        RESERVED_WORDS.add("saida"); //output
+        RESERVED_WORDS.add("entrada"); //input
     }
 
     @Override

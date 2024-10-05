@@ -21,7 +21,7 @@ public class Parser {
     }
 
     public boolean ifElse() {
-        if (matchLexeme("se") && condition() && matchLexeme("cpa") && expression() && matchLexeme("cnao") && expression()) {
+        if (matchLexeme("se") && condition() && matchLexeme("{") && expression() && matchLexeme("}") && matchLexeme("cnao") && expression()) {
             return true;
         }
         error("ifElse", currentToken);
@@ -44,8 +44,10 @@ public class Parser {
         return false;
     }
 
+    // if (x > 10 && x < 10)
+
     public boolean condition() {
-        if (matchType("ID") && operator() && matchType(num())) {
+        if ((matchType(num()) || matchType("ID")) && operator() && (matchType(num()) || matchType("ID"))) {
             return true;
         }
         error("condition", currentToken);
@@ -61,7 +63,7 @@ public class Parser {
     }
 
     public boolean operator() {
-        if (matchLexeme("<") || matchLexeme(">") || matchLexeme("==")) {
+        if (matchLexeme("<") || matchLexeme(">") || matchLexeme("==") || matchLexeme("<=") || matchLexeme(">=") || matchLexeme("!=")) {
             return true;
         }
         error("operator", currentToken);
