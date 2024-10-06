@@ -21,10 +21,20 @@ public class Parser {
     }
 
     public boolean ifElse() {
-        if (matchLexeme("se") && condition() && matchLexeme("{") && expression() && matchLexeme("}") && matchLexeme("cnao") && expression()) {
+        if (matchLexeme("se") && matchLexeme("(") && condition() && matchLexeme(")") && matchLexeme("{") && expression() && matchLexeme("}") && matchLexeme("cnao") && expression()) {
             return true;
         }
         error("ifElse", currentToken);
+        return false;
+    }
+
+    public boolean conditionalOperator(){
+        if( matchLexeme("&&") && (condition() && matchLexeme(")") || condition() && conditionalOperator()) ){
+            return true;
+        }
+        else if( matchLexeme("||") && (condition() && matchLexeme(")") || condition() && conditionalOperator()) ){
+            return true;
+        }
         return false;
     }
 
@@ -38,8 +48,6 @@ public class Parser {
 
     public boolean matchType(String type) {
         if (currentToken.getType().equals(type)) {
-        System.out.println("aaa" + currentToken.getLexeme());
-
             currentToken = getNextToken();
             return true;
         }
@@ -49,7 +57,7 @@ public class Parser {
     // if (x > 10 && x < 10)
 
     public boolean condition() {
-        if (matchType("ID") && operator() && (matchType(num()) || matchType("ID"))) {
+        if ((matchType(num()) || matchType("ID")) && operator() && (matchType(num()) || matchType("ID"))) {
             return true;
         }
         error("condition", currentToken);
