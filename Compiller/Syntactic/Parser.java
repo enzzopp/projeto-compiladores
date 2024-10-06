@@ -38,6 +38,8 @@ public class Parser {
 
     public boolean matchType(String type) {
         if (currentToken.getType().equals(type)) {
+        System.out.println("aaa" + currentToken.getLexeme());
+
             currentToken = getNextToken();
             return true;
         }
@@ -47,7 +49,7 @@ public class Parser {
     // if (x > 10 && x < 10)
 
     public boolean condition() {
-        if ((matchType(num()) || matchType("ID")) && operator() && (matchType(num()) || matchType("ID"))) {
+        if (matchType("ID") && operator() && (matchType(num()) || matchType("ID"))) {
             return true;
         }
         error("condition", currentToken);
