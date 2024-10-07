@@ -21,20 +21,13 @@ public class Parser {
     }
 
     public boolean ifElse() {
-        if (matchLexeme("se") && matchLexeme("(") && condition() && matchLexeme(")") && matchLexeme("{") && expression() && matchLexeme("}") && matchLexeme("cnao") && expression()) {
+        if (
+        matchLexeme("se") && matchLexeme("(") && condition() && matchLexeme(")")
+        && matchLexeme("{") && expression() && matchLexeme("}") 
+        && matchLexeme("cnao")
+        && matchLexeme("{") && expression() && matchLexeme("}")) {
             return true;
-        }
-        error("ifElse", currentToken);
-        return false;
-    }
-
-    public boolean conditionalOperator(){
-        if( matchLexeme("&&") && (condition() && matchLexeme(")") || condition() && conditionalOperator()) ){
-            return true;
-        }
-        else if( matchLexeme("||") && (condition() && matchLexeme(")") || condition() && conditionalOperator()) ){
-            return true;
-        }
+        } 
         return false;
     }
 
@@ -54,22 +47,19 @@ public class Parser {
         return false;
     }
 
-    // if (x > 10 && x < 10)
-
     public boolean condition() {
-        if ((matchType(num()) || matchType("ID")) && operator() && (matchType(num()) || matchType("ID"))) {
+        if ( (num() || matchType("ID")) && operator() && (num() || matchType("ID"))) {
             return true;
         }
         error("condition", currentToken);
         return false;
     }
 
-    public String num() {
+    public boolean num() {
         if (matchType("FLOAT") || matchType("INT")) {
-            return "num";
+            return true;
         }
-        error("num", currentToken);
-        return null;
+        return false;
     }
 
     public boolean operator() {
@@ -81,7 +71,7 @@ public class Parser {
     }
 
     public boolean expression() {
-        if (matchType("ID") && matchLexeme("=") && matchType("num")) {
+        if (matchType("ID") && matchLexeme("=") && (num() || matchType("ID"))) {
             return true;
         }
         error("expression", currentToken);
