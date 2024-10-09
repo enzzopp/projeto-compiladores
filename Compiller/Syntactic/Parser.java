@@ -43,12 +43,12 @@ public class Parser {
 
     public boolean ifElse() {
         if (
-        matchLexeme("se") && matchLexeme("(") && condition() && matchLexeme(")")
-        && matchLexeme("{") && expression() && matchLexeme("}") 
-        && matchLexeme("cnao")
-        && matchLexeme("{") && expression() && matchLexeme("}")) {
+            matchLexeme("se") && matchLexeme("(") && condition() && matchLexeme(")") 
+            && matchLexeme("{") && expression() && matchLexeme("}") &&
+            matchLexeme("cnao") && matchLexeme("{") && expression() && matchLexeme("}")
+        ){
             return true;
-        } 
+        }
         return false;
     }
 
@@ -69,7 +69,7 @@ public class Parser {
     }
 
     public boolean condition() {
-        if ( (num() || matchType("ID")) && operator() && (num() || matchType("ID"))) {
+        if ( matchType("ID") && operator() && (num() || matchType("ID"))) {
             return true;
         }
         error("condition", currentToken);
@@ -91,11 +91,69 @@ public class Parser {
         return false;
     }
 
+    // ifElse -> se '(' condition ')' '{' expression '}' cnao '{' expression '}'
+    // condition -> ID operator (num | ID)
+    // num -> FLOAT | INT
+    // operator -> '<' | '>' | '==' | '<=' | '>=' | '!='
+    // expression -> ID '=' E
+    // E -> T E'
+    // E' -> + T E' | - T E' | ε
+    // T -> F T'
+    // T' -> * F T' | / F T' | ε
+    // F -> '(' E ')' | ID | num
+
     public boolean expression() {
-        if (matchType("ID") && matchLexeme("=") && (num() || matchType("ID"))) {
+        if (matchType("ID") && matchLexeme("=") && E()) {
             return true;
         }
         error("expression", currentToken);
+        return false;
+    }
+
+    public boolean E() {
+        if (T() && E_()) {
+            return true;
+        }
+        error("E", currentToken);
+        return false;
+    }
+
+    public boolean E_() {
+        if (matchLexeme("+") && T() && E_()) {
+            return true;
+        }
+        else if (matchLexeme("-") && T() && E_()) {
+            return true;
+        }
+        return true;
+    }
+
+    public boolean T() {
+        if (F() && T_()) {
+            return true;
+        }
+        error("T", currentToken);
+        return false;
+    }
+
+    public boolean T_() {
+        if (matchLexeme("*") && F() && T_()) {
+            return true;
+        }
+        else if (matchLexeme("/") && F() && T_()) {
+            return true;
+        }
+        return true;
+    }
+
+    public boolean F() {
+        if (matchLexeme("(") && E() && matchLexeme(")")) {
+            return true;
+        }
+        else if (matchType("ID") || num()) {
+            return true;
+        }
+        error("F", currentToken);
         return false;
     }
 
