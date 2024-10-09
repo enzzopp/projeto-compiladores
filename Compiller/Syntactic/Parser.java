@@ -20,6 +20,27 @@ public class Parser {
         " by lexeme " + currentToken.getLexeme() + " and type " + currentToken.getType());
     }
 
+    // ifElse -> se '(' condition ')' '{' expression '}' cnao '{' expression '}'
+    // condition -> ID operator (num | ID)
+    // num -> FLOAT | INT
+    // operator -> '<' | '>' | '==' | '<=' | '>=' | '!='
+    // expression -> ID '=' E
+    // E -> E + T | E - T | T
+    // T -> T * F | T / F | F
+    // F -> '(' E ')' | ID | num
+
+    // eliminando recursão a esquerda e fatorando
+    // ifElse -> se '(' condition ')' '{' expression '}' cnao '{' expression '}'
+    // condition -> ID operator (num | ID)
+    // num -> FLOAT | INT
+    // operator -> '<' | '>' | '==' | '<=' | '>=' | '!='
+    // expression -> ID '=' E
+    // E -> T E'
+    // E' -> + T E' | - T E' | ε
+    // T -> F T'
+    // T' -> * F T' | / F T' | ε
+    // F -> '(' E ')' | ID | num
+
     public boolean ifElse() {
         if (
         matchLexeme("se") && matchLexeme("(") && condition() && matchLexeme(")")
