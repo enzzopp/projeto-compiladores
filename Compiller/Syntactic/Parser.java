@@ -21,25 +21,25 @@ public class Parser {
     }
 
     // ifElse -> se '(' condition ')' '{' expression '}' cnao '{' expression '}'
-    // condition -> ID operator (num | ID)
+    // condition -> 'id' operator (num | 'id')
     // num -> FLOAT | INT
     // operator -> '<' | '>' | '==' | '<=' | '>=' | '!='
-    // expression -> ID '=' E
+    // expression -> 'id' '=' E
     // E -> E + T | E - T | T
     // T -> T * F | T / F | F
-    // F -> '(' E ')' | ID | num
+    // F -> '(' E ')' | 'id' | num
 
     // eliminando recursão a esquerda e fatorando
     // ifElse -> se '(' condition ')' '{' expression '}' cnao '{' expression '}'
-    // condition -> ID operator (num | ID)
+    // condition -> 'id' operator (num | 'id')
     // num -> FLOAT | INT
     // operator -> '<' | '>' | '==' | '<=' | '>=' | '!='
-    // expression -> ID '=' E
+    // expression -> 'id' '=' E
     // E -> T E'
     // E' -> + T E' | - T E' | ε
     // T -> F T'
     // T' -> * F T' | / F T' | ε
-    // F -> '(' E ')' | ID | num
+    // F -> '(' E ')' | 'id' | num
 
     public boolean ifElse() {
         if (
@@ -90,17 +90,6 @@ public class Parser {
         error("operator", currentToken);
         return false;
     }
-
-    // ifElse -> se '(' condition ')' '{' expression '}' cnao '{' expression '}'
-    // condition -> ID operator (num | ID)
-    // num -> FLOAT | INT
-    // operator -> '<' | '>' | '==' | '<=' | '>=' | '!='
-    // expression -> ID '=' E
-    // E -> T E'
-    // E' -> + T E' | - T E' | ε
-    // T -> F T'
-    // T' -> * F T' | / F T' | ε
-    // F -> '(' E ')' | ID | num
 
     public boolean expression() {
         if (matchType("ID") && matchLexeme("=") && E()) {
