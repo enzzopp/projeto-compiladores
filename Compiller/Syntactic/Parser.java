@@ -30,15 +30,18 @@ public class Parser {
     // F -> '(' E ')' | 'id' | num
 
     // eliminando recursão a esquerda e fatorando
-    // ifElse -> se '(' condition ')' '{' expression '}' cnao '{' expression '}'
+    // Bloco -> IFELSE BLOCO | FOR BLOCO | WHILE BLOCO | atr BLOCO| ε
+    // IFELSE -> se '(' condition ')' '{' BLOCO '}' cnao '{' BLOCO '}'
+    // atr -> 'id' '=' E ; X
+    // X -> atr | ε
     // condition -> 'id' operator (num | 'id')
     // num -> FLOAT | INT
     // operator -> '<' | '>' | '==' | '<=' | '>=' | '!='
-    // expression -> 'id' '=' E
-    // E -> T E'
-    // E' -> + T E' | - T E' | ε
-    // T -> F T'
-    // T' -> * F T' | / F T' | ε
+    // atribuicao -> Q
+    // E -> T R
+    // R -> '+' T R | '-' T R | ε
+    // T -> F S
+    // S -> '*' F S | '/' F S | ε
     // F -> '(' E ')' | 'id' | num
 
     public boolean ifElse() {
