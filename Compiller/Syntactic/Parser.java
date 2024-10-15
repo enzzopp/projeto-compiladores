@@ -6,6 +6,7 @@ public class Parser {
     
     private List<Token> tokens;
     private Token currentToken;
+    private Token previousToken;
 
     public Parser(List<Token> tokens) {
         this.tokens = tokens;
@@ -30,7 +31,7 @@ public class Parser {
     // F -> '(' E ')' | 'id' | num
 
     // eliminando recursão a esquerda e fatorando
-    // Bloco -> IFELSE BLOCO | FOR BLOCO | WHILE BLOCO | atr BLOCO| ε
+    // BLOCO -> IFELSE BLOCO | FOR BLOCO | WHILE BLOCO | atr BLOCO | ε
     // IFELSE -> se '(' condition ')' '{' BLOCO '}' cnao '{' BLOCO '}'
     // atr -> 'id' '=' E ; X
     // X -> atr | ε
@@ -44,19 +45,136 @@ public class Parser {
     // S -> '*' F S | '/' F S | ε
     // F -> '(' E ')' | 'id' | num
 
-    public boolean ifElse() {
-        if (
-            matchLexeme("se") && matchLexeme("(") && condition() && matchLexeme(")") 
-            && matchLexeme("{") && expression() && matchLexeme("}") &&
-            matchLexeme("cnao") && matchLexeme("{") && expression() && matchLexeme("}")
-        ){
-            return true;
+    public boolean BLOCO() {
+        if (currentToken.getLexeme().equals("se")) {
+            if (IFELSE() && BLOCO()) {
+                return true;
+            }
+            return false;
+        }
+        else if (currentToken.getType().equals("ID")) { // atribuição
+            if (ATR() && BLOCO()) {
+                return true;
+            }
+            return false;
+        }
+        return true;
+    }
+
+    public boolean IFELSE() {
+        if (currentToken.getLexeme().equals("se")) {
+            if 
+            (
+                matchLexeme("se") && matchLexeme("(") && COND() &&
+                matchLexeme(")") && matchLexeme("{") && BLOCO() &&
+                matchLexeme("}") && matchLexeme("cnao") && matchLexeme("{") &&
+                BLOCO() && matchLexeme("}")
+            )
+            {
+                return true;
+            }
+            error("IFELSE", previousToken);
+            return false;
         }
         return false;
     }
 
+    public boolean COND() {
+        if 
+        (
+            matchType("ID") && OP() && (matchType("FLOAT") || matchType("INT"))
+        )
+        {
+            return true;
+        }
+        error("COND", currentToken);
+        return false;
+    }
+
+    public boolean OP() {
+        if 
+        (
+            matchLexeme("<") || matchLexeme(">") || matchLexeme("==") ||
+            matchLexeme("<=") || matchLexeme(">=") || matchLexeme("!=")
+        )
+        {
+            return true;
+        }
+        error("OP", currentToken);
+        return false;
+    }
+
+    public boolean ATR() {
+        if (matchType("ID")) {
+            if (matchLexeme("=")){
+                if (EXP()) {
+                    if (matchLexeme(";")) {
+                        if (X()) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        error("ATR", previousToken);
+        return false;
+    }
+
+    public boolean X() {
+        if (currentToken.getType().equals("ID")) {
+            if (ATR()) {
+                return true;
+            }
+        }
+        return true;
+    }
+
+    public boolean EXP() {
+        if (T() && R()) {
+            return true;
+        }
+        error("EXP", currentToken);
+        return false;
+    }
+
+    public boolean R() {
+        if (matchLexeme("+") && T() && R() || matchLexeme("-") && T() && R()) {
+            return true;
+        }
+        return true;
+    }
+
+    public boolean T() {
+        if (F() && S()) {
+            return true;
+        }
+        error("T", currentToken);
+        return false;
+    }
+
+    public boolean S() {
+        if (matchLexeme("*") && F() && S() || matchLexeme("/") && F() && S()) {
+            return true;
+        }
+        return true;
+    }
+
+    public boolean F() {
+        if 
+        (
+            matchLexeme("(") && EXP() && matchLexeme(")") || matchType("ID") || matchType("FLOAT") || matchType("INT")
+        )
+        {
+            return true;
+        }
+        error("F", currentToken);
+        return false;
+    }
+    
+
     public boolean matchLexeme(String lexeme) {
         if (currentToken.getLexeme().equals(lexeme)) {
+            previousToken = currentToken;
             currentToken = getNextToken();
             return true;
         }
@@ -65,93 +183,16 @@ public class Parser {
 
     public boolean matchType(String type) {
         if (currentToken.getType().equals(type)) {
+            previousToken = currentToken;
             currentToken = getNextToken();
             return true;
         }
         return false;
     }
 
-    public boolean condition() {
-        if ( matchType("ID") && operator() && (num() || matchType("ID"))) {
-            return true;
-        }
-        error("condition", currentToken);
-        return false;
-    }
-
-    public boolean num() {
-        if (matchType("FLOAT") || matchType("INT")) {
-            return true;
-        }
-        return false;
-    }
-
-    public boolean operator() {
-        if (matchLexeme("<") || matchLexeme(">") || matchLexeme("==") || matchLexeme("<=") || matchLexeme(">=") || matchLexeme("!=")) {
-            return true;
-        }
-        error("operator", currentToken);
-        return false;
-    }
-
-    public boolean expression() {
-        if (matchType("ID") && matchLexeme("=") && E()) {
-            return true;
-        }
-        error("expression", currentToken);
-        return false;
-    }
-
-    public boolean E() {
-        if (T() && E_()) {
-            return true;
-        }
-        error("E", currentToken);
-        return false;
-    }
-
-    public boolean E_() {
-        if (matchLexeme("+") && T() && E_()) {
-            return true;
-        }
-        else if (matchLexeme("-") && T() && E_()) {
-            return true;
-        }
-        return true;
-    }
-
-    public boolean T() {
-        if (F() && T_()) {
-            return true;
-        }
-        error("T", currentToken);
-        return false;
-    }
-
-    public boolean T_() {
-        if (matchLexeme("*") && F() && T_()) {
-            return true;
-        }
-        else if (matchLexeme("/") && F() && T_()) {
-            return true;
-        }
-        return true;
-    }
-
-    public boolean F() {
-        if (matchLexeme("(") && E() && matchLexeme(")")) {
-            return true;
-        }
-        else if (matchType("ID") || num()) {
-            return true;
-        }
-        error("F", currentToken);
-        return false;
-    }
-
     public void analyze() {
         currentToken = getNextToken();
-        if(ifElse()) {
+        if(BLOCO()) {
             if (currentToken.getType().equals("EOF")) {
                 System.out.println("Syntax is correct!");
             } else {
@@ -159,7 +200,7 @@ public class Parser {
             }
         }
         else {
-            error("ifElse", currentToken);
+            error("BLOCO", previousToken);
         }
     }
 
