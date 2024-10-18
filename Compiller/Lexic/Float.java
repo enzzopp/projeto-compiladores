@@ -7,6 +7,7 @@ public class Float extends AFD {
     public Token evaluate(CharacterIterator code, int line) {
 
         if (Character.isDigit(code.current()) || code.current() == '.'){
+
             String lexeme = readNumber(code);
 
             if (endNumber(code) && !lexeme.equals(".")){

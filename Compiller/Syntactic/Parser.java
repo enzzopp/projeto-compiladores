@@ -1,4 +1,5 @@
 package Compiller.Syntactic;
+import java.util.ArrayList;
 import java.util.List;
 import Compiller.Lexic.Token;
 
@@ -7,54 +8,57 @@ public class Parser {
     private List<Token> tokens;
     private Token currentToken;
     private Token previousToken;
+    private List<Token> tokenErrorList;
 
     public Parser(List<Token> tokens) {
         this.tokens = tokens;
+        this.tokenErrorList = new ArrayList<>();
     }
 
     public Token getNextToken() {
-        return tokens.size() > 0 ? tokens.remove(0) : null;
+        
+        if (tokens.size() > 0) {
+            return tokens.remove(0);
+        }
+        return null;
     }
 
     public void error(String rule, Token currentToken) {
-        System.out.println("Error in rule " + rule + " at line " + currentToken.getLine() +
-        " by lexeme " + currentToken.getLexeme() + " and type " + currentToken.getType());
+
+        if (currentToken.getType() == "EOF") {
+            return;
+        }
+        
+        if (!tokenErrorList.contains(currentToken)) {
+            tokenErrorList.add(currentToken);
+
+            String errorMessage = String.format(
+            "\n\nSyntax Error:\n\t unexpected token at line %s got: %s expected: %s\u001B[0m",
+            currentToken.getLine(),                                  // Regra esperada em vermelho
+            "\u001B[31m" + currentToken.getLexeme() + "\u001B[0m",              // Token atual em amarelo
+            "\u001B[32m" + rule + "\u001B[0m"                 // Número da linha em amarelo
+);
+
+            System.out.println(errorMessage);
+        }
     }
 
-    // ifElse -> se '(' condition ')' '{' expression '}' cnao '{' expression '}'
-    // condition -> 'id' operator (num | 'id')
-    // num -> FLOAT | INT
-    // operator -> '<' | '>' | '==' | '<=' | '>=' | '!='
-    // expression -> 'id' '=' E
-    // E -> E + T | E - T | T
-    // T -> T * F | T / F | F
-    // F -> '(' E ')' | 'id' | num
-
-    // eliminando recursão a esquerda e fatorando
-    // BLOCO -> IFELSE BLOCO | FOR BLOCO | WHILE BLOCO | atr BLOCO | ε
-    // IFELSE -> se '(' condition ')' '{' BLOCO '}' cnao '{' BLOCO '}'
-    // atr -> 'id' '=' E ; X
-    // X -> atr | ε
-    // condition -> 'id' operator (num | 'id')
-    // num -> FLOAT | INT
-    // operator -> '<' | '>' | '==' | '<=' | '>=' | '!='
-    // atribuicao -> Q
-    // E -> T R
-    // R -> '+' T R | '-' T R | ε
-    // T -> F S
-    // S -> '*' F S | '/' F S | ε
-    // F -> '(' E ')' | 'id' | num
-
     public boolean BLOCO() {
-        if (currentToken.getLexeme().equals("se")) {
-            if (IFELSE() && BLOCO()) {
-                return true;
+        if (currentToken.getLexeme().equals("se")) { // IFELSE
+            if (IFELSE()) {
+                if (BLOCO()) {
+                    return true;
+                }
+                return false;
             }
             return false;
         }
-        else if (currentToken.getType().equals("ID")) { // atribuição
-            if (ATR() && BLOCO()) {
-                return true;
+        else if (currentToken.getType().equals("ID")) { // ATR
+            if (ATR()) {
+                if (BLOCO()) {
+                    return true;
+                }
+                return false;
             }
             return false;
         }
@@ -62,42 +66,80 @@ public class Parser {
     }
 
     public boolean IFELSE() {
-        if (currentToken.getLexeme().equals("se")) {
-            if 
-            (
-                matchLexeme("se") && matchLexeme("(") && COND() &&
-                matchLexeme(")") && matchLexeme("{") && BLOCO() &&
-                matchLexeme("}") && matchLexeme("cnao") && matchLexeme("{") &&
-                BLOCO() && matchLexeme("}")
-            )
-            {
-                return true;
+        if (matchLexeme("se")) {
+            if (matchLexeme("(")) {
+                if (COND()) {
+                    if (matchLexeme(")")) {
+                        if (matchLexeme("{")) {
+                            if (BLOCO()) {
+                                if (matchLexeme("}")) {
+                                    if (matchLexeme("cnao")) {
+                                        if (matchLexeme("{")) {
+                                            if (BLOCO()) {
+                                                if (matchLexeme("}")) {
+                                                    return true;
+                                                }
+                                                error("}", currentToken);
+                                                return false;
+                                            }
+                                            return false;
+                                        }
+                                        error("{", currentToken);
+                                        return false;
+                                    }
+                                    error("cnao", currentToken);
+                                    return false;
+                                }
+                                return false;
+                            }
+                            return false;
+                        }
+                        return false;
+                    }
+                    return false;
+                }
+                return false;
             }
-            error("IFELSE", previousToken);
             return false;
         }
         return false;
     }
 
     public boolean COND() {
-        if 
-        (
-            matchType("ID") && OP() && (matchType("FLOAT") || matchType("INT"))
-        )
-        {
-            return true;
+        if (matchType("ID")) {
+            if (OP()) {
+                if (NUM()) {
+                    return true;
+                }
+                else if (matchType("ID")) {
+                    return true;
+                }
+                error("INT or FLOAT", currentToken);
+                return false;
+            }
+            return false;
         }
-        error("COND", currentToken);
+        error("ID", currentToken);
         return false;
     }
 
     public boolean OP() {
-        if 
-        (
-            matchLexeme("<") || matchLexeme(">") || matchLexeme("==") ||
-            matchLexeme("<=") || matchLexeme(">=") || matchLexeme("!=")
-        )
-        {
+        if (matchLexeme("<")) {
+            return true;
+        }
+        else if (matchLexeme(">")) {
+            return true;
+        }
+        else if (matchLexeme("==")) {
+            return true;
+        }
+        else if (matchLexeme("<=")) {
+            return true;
+        }
+        else if (matchLexeme(">=")) {
+            return true;
+        }
+        else if (matchLexeme("!=")) {
             return true;
         }
         error("OP", currentToken);
@@ -113,15 +155,20 @@ public class Parser {
                             return true;
                         }
                     }
+                    error(";", currentToken);
+                    return false;
                 }
+                return false;
             }
+            error("=", currentToken);
+            return false;
         }
-        error("ATR", previousToken);
+        error("ID", currentToken);
         return false;
     }
 
     public boolean X() {
-        if (currentToken.getType().equals("ID")) {
+        if (currentToken.getType().equals("ID")) {   
             if (ATR()) {
                 return true;
             }
@@ -130,44 +177,86 @@ public class Parser {
     }
 
     public boolean EXP() {
-        if (T() && R()) {
-            return true;
+        if (T()) {
+            if (R()) {
+                return true;
+            }
         }
-        error("EXP", currentToken);
         return false;
     }
 
     public boolean R() {
-        if (matchLexeme("+") && T() && R() || matchLexeme("-") && T() && R()) {
-            return true;
+        if (matchLexeme("+")){
+            if (T()) {
+                if (R()) {
+                    return true;
+                }
+            }
+        }
+        else if (matchLexeme("-")){
+            if (T()) {
+                if (R()) {
+                    return true;
+                }
+            }
         }
         return true;
     }
 
     public boolean T() {
-        if (F() && S()) {
-            return true;
+        if (F()){
+            if (S()) {
+                return true;
+            }
         }
-        error("T", currentToken);
         return false;
     }
 
     public boolean S() {
-        if (matchLexeme("*") && F() && S() || matchLexeme("/") && F() && S()) {
-            return true;
+        if (matchLexeme("*")) {
+            if (F()) {
+                if (S()) {
+                    return true;
+                }
+            }
+        }
+        else if (matchLexeme("/")) {
+            if (F()) {
+                if (S()) {
+                    return true;
+                }
+            }
         }
         return true;
     }
 
     public boolean F() {
-        if 
-        (
-            matchLexeme("(") && EXP() && matchLexeme(")") || matchType("ID") || matchType("FLOAT") || matchType("INT")
-        )
-        {
+        if (matchLexeme("(")) {
+            if (EXP()) {
+                if (matchLexeme(")")) {
+                    return true;
+                }
+                error(")", currentToken);
+                return false;
+            }
+        }
+        else if (matchType("ID")) {
             return true;
         }
-        error("F", currentToken);
+        else if (NUM()) {
+            return true;
+        }
+        error("ID or NUM or EXP", currentToken);
+        return false;
+    }
+
+    public boolean NUM() {
+        if (matchType("INT")) {
+            return true;
+        }
+        else if (matchType("FLOAT")) {
+            return true;
+        }
         return false;
     }
     
@@ -193,14 +282,15 @@ public class Parser {
     public void analyze() {
         currentToken = getNextToken();
         if(BLOCO()) {
-            if (currentToken.getType().equals("EOF")) {
+            if (currentToken.getType().equals("EOF") && tokenErrorList.size() == 0) {
                 System.out.println("Syntax is correct!");
-            } else {
+            } 
+            else {
                 error("EOF", currentToken);
             }
         }
         else {
-            error("BLOCO", previousToken);
+            error("BLOCO", currentToken);
         }
     }
 
