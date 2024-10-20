@@ -81,6 +81,14 @@ Agradecemos às seguintes pessoas que trabalharam neste projeto:
         </sub>
       </a>
     </td>
+    <td align="center">
+      <a href="https://github.com/FelipeOrlandoLanzara">
+        <img src="https://avatars.githubusercontent.com/u/115379350?s=400&v=4" width="100px;"/><br>
+        <sub>
+          <b>Felipe Orlando Lanzara</b>
+        </sub>
+      </a>
+    </td>
   </tr>
 </table>
 
