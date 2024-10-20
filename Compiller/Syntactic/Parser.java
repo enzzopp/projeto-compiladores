@@ -38,7 +38,7 @@ public class Parser {
             currentToken.getLine(),                                  // Regra esperada em vermelho
             "\u001B[31m" + currentToken.getLexeme() + "\u001B[0m",              // Token atual em amarelo
             "\u001B[32m" + rule + "\u001B[0m"                 // Número da linha em amarelo
-);
+            );
 
             System.out.println(errorMessage);
         }
@@ -54,7 +54,7 @@ public class Parser {
             }
             return false;
         }
-        else if (currentToken.getType().equals("ID")) { // ATR - PRECISA ARRUMAR PORQUE NAO TEM A MESMA LOGICA DO ATR NORMAL (i = 1; j = 2)
+        else if (currentToken.getType().equals("ID")) { // ATR
             if (ATR()) {
                 if (BLOCO()) {
                     return true;
@@ -79,20 +79,20 @@ public class Parser {
                 }
                 return false;
             }
+            return false;
         }
-        // else if (DECL()) { // DECLARAÇÃO
-        //     if (BLOCO()) {
-        //         return true;
-        //     }
-        //     return false;
-        // }
+        else if (currentToken.getType().equals("inteiro") || currentToken.getType().equals("decimal") || currentToken.getType().equals("texto") || currentToken.getType().equals("estado")) { // DECL
+            if (DECL()) {
+                if (BLOCO()) {
+                    return true;
+                }
+                return false;
+            }
+            return false;
+        }
         return true;
     }
 
-
-
-    
-    
     public boolean IFELSE() {
         if (matchLexeme("se")) {
             if (matchLexeme("(")) {
@@ -220,87 +220,91 @@ public class Parser {
         }
         return false;
     }
-    
-    // FOR ->       'para' '(' 'inteiro' 'ATR_FOR' ';' 'COND' ';' INC ')' '{' BLOCO '}'
-    // ATR_FOR ->   id '=' (num | 'id')
-    // INC ->       id '=' id OP_MAT num
-    // OP_MAT ->    + | - | / | *
 
-    // for (int i = 0; i < 10; i = i + 1) {
-    //   bloco
-    // }
+    public boolean DECL() {
+        if (INT()){
+            return true;
+        }
+        else if (FLOAT()){
+            return true;
+        }
+        // else if (TEXT()){
+        //     return true;
+        // }
+        // else if (ESTADO()){
+        //     return true;
+        // }
+        return false;
+    }
 
+    public boolean INT() {
+        if (matchType("inteiro")) {
+            if (matchType("ID")) {
+                if (matchLexeme(";")) {
+                    return true;
+                }
+                else if (matchLexeme("=")) {
+                    if (EXP()) {
+                        if (matchLexeme(";")) {
+                            return true;
+                        }
+                        error(";", currentToken);
+                        return false;
+                    }
+                    error("EXP", currentToken);
+                    return false;
+                }
+                error("; or =", currentToken);
+                return false;
+            }
+            error("ID", currentToken);
+            return false;   
+        }
+        return false;
+    }
 
+    public boolean FLOAT() {
+        if (matchType("decimal")) {
+            if (matchType("ID")) {
+                if (matchLexeme(";")) {
+                    return true;
+                }
+                else if (matchLexeme("=")) {
+                    if (EXP()) {
+                        if (matchLexeme(";")) {
+                            return true;
+                        }
+                        error(";", currentToken);
+                        return false;
+                    }
+                    error("EXP", currentToken);
+                    return false;
+                }
+                error("; or =", currentToken);
+                return false;
+            }
+            error("ID", currentToken);
+            return false;
+        }
+        return false;
+    }
 
-
-    // public boolean DECL() {
-    //     if (RES()) {
-    //         if(A()) {
-    //             return true;
-    //         }
-    //         error("A", currentToken);
-    //         return false;
-    //     }
-    //     error("RESERVADA", currentToken);
-    //     return false;
-    // }
-
-    // public boolean A() {
-    //     if (matchType("ID")) {
-    //         if (B()) {
-    //             return true;
-    //         }
-    //         error("B", currentToken);
-    //         return false;
-    //     }
-    //     error("ID", currentToken);
-    //     return false;
-    // }
-
-    // public boolean B() {
-    //     if (matchLexeme(";")) {
-    //         return true;
-    //     }
-    //     else if (matchLexeme("=")) {
-    //         if (EXP()) {
-    //             if (matchLexeme(";")) {
-    //                 return true;
-    //             }
-    //             error(";", currentToken);
-    //             return false;
-    //         }
-    //         error("EXP", currentToken);
-    //         return false;
-    //     }
-    //     error("; | =", currentToken);
-    //     return false;
-    // }
-    
-    // public boolean RES() {
-    //     if (matchLexeme("inteiro")) {
-    //         return true;
-    //     }
-    //     else if (matchLexeme("decimal")) {
-    //         return true;
-    //     }
-    //     else if (matchLexeme("texto")) {
-    //         return true;
-    //     }
-    //     else if (matchLexeme("estado")) {
-    //         return true;
-    //     }
-    //     error("RESERVADA", currentToken);
-    //     return false;
-    // }
-
-
-
-    // DECL → RES id ‘;’ | RES id ‘=’ EXP ‘;’
-    // DECL’-> RES A
-    // A -> id ‘;’ | id ‘=’ EXP ‘;’
-    // A’ -> id B
-    // B -> ‘;’ | ‘=’ EXP ‘;’ 
-
+    public boolean TIPO() {
+        if (matchLexeme("inteiro")) {
+            return true;
+        }
+        else if (matchLexeme("decimal")) {
+            return true;
+        }
+        else if (matchLexeme("texto")) {
+            return true;
+        }
+        else if (matchLexeme("estado")) {
+            return true;
+        }
+        error("TIPO", currentToken);
+        return false;
+    }
 
     public boolean ATR_FOR() {
         if (matchType("ID")) {
@@ -366,15 +370,12 @@ public class Parser {
     public boolean COND() {
         if (matchType("ID")) {
             if (OP()) {
-                if (NUM()) {
+                if (OP_()) {
                     return true;
                 }
-                else if (matchType("ID")) {
-                    return true;
-                }
-                error("INT or FLOAT", currentToken);
                 return false;
             }
+            error("OP", currentToken);
             return false;
         }
         error("ID", currentToken);
@@ -401,6 +402,17 @@ public class Parser {
             return true;
         }
         error("OP", currentToken);
+        return false;
+    }
+
+    public boolean OP_() {
+        if (matchType("ID")) {
+            return true;
+        }
+        else if (NUM()) {
+            return true;
+        }
+        error("ID or NUM", currentToken);
         return false;
     }
 
