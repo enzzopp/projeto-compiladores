@@ -58,6 +58,15 @@ public class Parser {
                 if (BLOCO()) {
                     return true;
                 }
+                return false; 
+            }
+            return false;
+        }
+        else if (currentToken.getLexeme().equals("enquanto")){
+            if (WHILE()){
+                if(BLOCO()) {
+                    return true;
+                }
                 return false;
             }
             return false;
@@ -90,16 +99,53 @@ public class Parser {
                                     error("cnao", currentToken);
                                     return false;
                                 }
+                                error("}", currentToken);
                                 return false;
                             }
+                            error("BLOCO", currentToken);
                             return false;
                         }
+                        error("{", currentToken);
                         return false;
                     }
+                    error(")", currentToken);
                     return false;
                 }
+                error("CONDICAO", currentToken);
                 return false;
             }
+            error("(", currentToken);
+            return false;
+        }
+        return false;
+    }
+
+    public boolean WHILE() {
+        if(matchLexeme("enquanto")){
+            if(matchLexeme("(")){
+                if(COND()){
+                    if (matchLexeme(")")) {
+                        if(matchLexeme("{")){
+                            if(BLOCO()){
+                                if(matchLexeme("}")){
+                                    return true;
+                                }
+                                error("}", currentToken);
+                                return false;
+                            }
+                            error("BLOCO", currentToken);
+                            return false;
+                        }
+                        error("{", currentToken);
+                        return false;
+                    }
+                    error(")", currentToken);
+                    return false;
+                }
+                error("CONDICAO", currentToken);
+                return false;
+            }
+            error("(", currentToken);
             return false;
         }
         return false;
