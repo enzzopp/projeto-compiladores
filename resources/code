@@ -1,6 +1,22 @@
-se (a == 2){
+i = 2; i = 4;
 
+para (inteiro i = 3; i < j; i = i + 1) {
+    x = 2;
+    x = 3;
+}
+
+
+se (a == l) {
+    enquanto(x > y) {
+        a = 2;
+        se (a == 34) {
+            x = 4;
+        }
+        cnao {
+            a = 2;
+        }
+    }
 }
 cnao {
-
+    a = 4;
 }
