@@ -26,9 +26,10 @@ public class Parser {
 
     public void error(String rule, Token currentToken) {
 
-        if (currentToken.getType() == "EOF") {
-            return;
-        }
+
+        // if (currentToken.getType() == "EOF") {
+        //     return;
+        // }
         
         if (!tokenErrorList.contains(currentToken)) {
             tokenErrorList.add(currentToken);
@@ -458,14 +459,22 @@ public class Parser {
     }
 
     public boolean Y() {
-        if (EXP()) {
+        if (matchType("TXT")) {
             if (matchLexeme(";")) {
                 return true;
             }
             error(";", currentToken);
             return false;
         }
-        else if (matchType("TXT")) {
+        else if ((matchLexeme("real")) || (matchLexeme("barça"))){
+            if (matchLexeme(";")) {
+                return true;
+            }
+            System.out.println("fffffff");
+            error(";", currentToken);
+            return false;
+        }
+        else if (EXP()) {
             if (matchLexeme(";")) {
                 return true;
             }

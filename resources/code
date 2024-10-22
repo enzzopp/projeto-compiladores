@@ -28,3 +28,10 @@ cnao {
 
 inteiro i = 2.5;
 decimal x = 2.53;
+
+a = "teste";
+
+a = barça;
+a = barça;
+
+i = real;
