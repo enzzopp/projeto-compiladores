@@ -35,3 +35,7 @@ a = barça;
 a = barça;
 
 i = real;
+
+estado e = real;
+estado e = barça;
+estado e;

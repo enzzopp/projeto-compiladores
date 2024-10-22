@@ -228,9 +228,9 @@ public class Parser {
         else if (STRING()){
             return true;
         }
-        // else if (ESTADO()){
-        //     return true;
-        // }
+        else if (BOOLEAN()){
+            return true;
+        }
         return false;
     }
 
@@ -319,8 +319,56 @@ public class Parser {
         error("; or =", currentToken);
         return false;
     }
-        
 
+    public boolean BOOLEAN() {
+        if (matchLexeme("estado")) {
+            if (matchType("ID")) {
+                if (BOOLEAN_()) {
+                    return true;
+                }
+                error("ID", currentToken);
+                return false;
+            }
+            error("estado", currentToken);
+            return false;
+        }
+        return false;
+    }
+
+    public boolean BOOLEAN_() {
+        if (matchLexeme(";")) {
+            return true;
+        }
+        else if (matchLexeme("=")) {
+            if (BOOLEAN__()) {
+                return true;
+            }
+            error("BOOLEAN__", currentToken);
+            return false;
+        }
+        error("; or =", currentToken);
+        return false;
+    }
+
+    public boolean BOOLEAN__() {
+        if (matchLexeme("real")) {
+            if (matchLexeme(";")) {
+                return true;
+            }
+            error(";", currentToken);
+            return false;
+        }
+        else if (matchLexeme("barça")) {
+            if (matchLexeme(";")) {
+                return true;
+            }
+            error(";", currentToken);
+            return false;
+        }
+        error("real or barça", currentToken);
+        return false;
+    }
+        
     public boolean ATR_FOR() {
         if (matchLexeme("inteiro")) {
             if (matchType("ID")) {
@@ -470,7 +518,6 @@ public class Parser {
             if (matchLexeme(";")) {
                 return true;
             }
-            System.out.println("fffffff");
             error(";", currentToken);
             return false;
         }
