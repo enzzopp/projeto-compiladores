@@ -81,7 +81,7 @@ public class Parser {
             }
             return false;
         }
-        else if (currentToken.getType().equals("inteiro") || currentToken.getType().equals("decimal") || currentToken.getType().equals("texto") || currentToken.getType().equals("estado")) { // DECL
+        else if (currentToken.getLexeme().equals("inteiro") || currentToken.getLexeme().equals("decimal") || currentToken.getLexeme().equals("texto") || currentToken.getLexeme().equals("estado")) { // DECL
             if (DECL()) {
                 if (BLOCO()) {
                     return true;
@@ -173,46 +173,42 @@ public class Parser {
     public boolean FOR() {
         if (matchLexeme("para")) {
             if (matchLexeme("(")) {
-                if (matchLexeme("inteiro")) {
-                    if (ATR_FOR()) {
-                        if (matchLexeme(";")) {
-                            if (COND()) {
-                                if (matchLexeme(";")) {
-                                    if (INC()) {
-                                        if (matchLexeme(")")) {
-                                            if (matchLexeme("{")) {
-                                                if (BLOCO()) {
-                                                    if (matchLexeme("}")) {
-                                                        return true;
-                                                    }
-                                                    error("}", currentToken);
-                                                    return false;
+                if (ATR_FOR()) {
+                    if (matchLexeme(";")) {
+                        if (COND()) {
+                            if (matchLexeme(";")) {
+                                if (INC()) {
+                                    if (matchLexeme(")")) {
+                                        if (matchLexeme("{")) {
+                                            if (BLOCO()) {
+                                                if (matchLexeme("}")) {
+                                                    return true;
                                                 }
-                                                error("BLOCO", currentToken);
+                                                error("}", currentToken);
                                                 return false;
                                             }
-                                            error("{", currentToken);
+                                            error("BLOCO", currentToken);
                                             return false;
                                         }
-                                        error(")", currentToken);
+                                        error("{", currentToken);
                                         return false;
                                     }
-                                    error("INC", currentToken);
+                                    error(")", currentToken);
                                     return false;
                                 }
-                                error(";", currentToken);
+                                error("INC", currentToken);
                                 return false;
                             }
-                            error("CONDICAO", currentToken);
+                            error(";", currentToken);
                             return false;
                         }
-                        error(";", currentToken);
+                        error("CONDICAO", currentToken);
                         return false;
                     }
-                    error("ATR_FOR", currentToken);
+                    error(";", currentToken);
                     return false;
                 }
-                error("inteiro", currentToken);
+                error("ATR_FOR", currentToken);
                 return false;
             }
             error("(", currentToken);
@@ -228,9 +224,9 @@ public class Parser {
         else if (FLOAT()){
             return true;
         }
-        // else if (TEXT()){
-        //     return true;
-        // }
+        else if (STRING()){
+            return true;
+        }
         // else if (ESTADO()){
         //     return true;
         // }
@@ -238,7 +234,7 @@ public class Parser {
     }
 
     public boolean INT() {
-        if (matchType("inteiro")) {
+        if (matchLexeme("inteiro")) {
             if (matchType("ID")) {
                 if (matchLexeme(";")) {
                     return true;
@@ -264,7 +260,7 @@ public class Parser {
     }
 
     public boolean FLOAT() {
-        if (matchType("decimal")) {
+        if (matchLexeme("decimal")) {
             if (matchType("ID")) {
                 if (matchLexeme(";")) {
                     return true;
@@ -289,39 +285,61 @@ public class Parser {
         return false;
     }
 
-    public boolean TIPO() {
-        if (matchLexeme("inteiro")) {
-            return true;
+    public boolean STRING() {
+        if (matchLexeme("texto")) {
+            if (matchType("ID")) {
+                if (STRING_()) {
+                    return true;
+                }
+                error("; or =", currentToken);
+                return false;
+            }
+            error("ID", currentToken);
+            return false;
         }
-        else if (matchLexeme("decimal")) {
-            return true;
-        }
-        else if (matchLexeme("texto")) {
-            return true;
-        }
-        else if (matchLexeme("estado")) {
-            return true;
-        }
-        error("TIPO", currentToken);
         return false;
     }
 
-    public boolean ATR_FOR() {
-        if (matchType("ID")) {
-            if (matchLexeme("=")) {
-                if (NUM()) {
+    public boolean STRING_() {
+        if (matchLexeme(";")) {
+            return true;
+        }
+        else if (matchLexeme("=")) {
+            if (matchType("TXT")) {
+                if (matchLexeme(";")) {
                     return true;
                 }
-                else if (matchType("ID")) {
-                    return true;
-                }
-                error("ID or NUM", currentToken);
+                error(";", currentToken);
                 return false;
             }
-            error("=", currentToken);
+            error("TXT", currentToken);
             return false;
         }
-        error("ID", currentToken);
+        error("; or =", currentToken);
+        return false;
+    }
+        
+
+    public boolean ATR_FOR() {
+        if (matchLexeme("inteiro")) {
+            if (matchType("ID")) {
+                if (matchLexeme("=")) {
+                    if (NUM()) {
+                        return true;
+                    }
+                    else if (matchType("ID")) {
+                        return true;
+                    }
+                    error("ID or NUM", currentToken);
+                    return false;
+                }
+                error("=", currentToken);
+                return false;
+            }
+            error("ID", currentToken);
+            return false;
+        }
+        error("inteiro", currentToken);
         return false;
     }
 
@@ -418,17 +436,8 @@ public class Parser {
 
     public boolean ATR() {
         if (matchType("ID")) {
-            if (matchLexeme("=")){
-                if (EXP()) {
-                    if (matchLexeme(";")) {
-                        if (X()) {
-                            return true;
-                        }
-                    }
-                    error(";", currentToken);
-                    return false;
-                }
-                return false;
+            if(X()) {
+                return true;
             }
             error("=", currentToken);
             return false;
@@ -438,12 +447,32 @@ public class Parser {
     }
 
     public boolean X() {
-        if (currentToken.getType().equals("ID")) {   
-            if (ATR()) {
+        if (matchLexeme("=")) {
+            if (Y()) {
                 return true;
             }
+            return false;
         }
-        return true;
+        error("=", currentToken);
+        return false;
+    }
+
+    public boolean Y() {
+        if (EXP()) {
+            if (matchLexeme(";")) {
+                return true;
+            }
+            error(";", currentToken);
+            return false;
+        }
+        else if (matchType("TXT")) {
+            if (matchLexeme(";")) {
+                return true;
+            }
+            error(";", currentToken);
+            return false;
+        }
+        return false;
     }
 
     public boolean EXP() {

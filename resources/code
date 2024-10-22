@@ -1,4 +1,5 @@
-i = 2; i = 4;
+i = 2; 
+i = 4;
 
 inteiro i = 1;
 
@@ -9,10 +10,10 @@ para (inteiro i = 3; i < j; i = i + 1) {
 
 
 se (a == l) {
-    enquanto(x > y) {
+    enquanto(x > 345.45) {
         a = 2;
-        se (a == 34) {
-            x = 4;
+        se (a == 34.6) {
+            inteiro x = 4;
         }
         cnao {
             a = 2;
@@ -26,3 +27,4 @@ cnao {
 
 
 inteiro i = 2.5;
+decimal x = 2.53;
