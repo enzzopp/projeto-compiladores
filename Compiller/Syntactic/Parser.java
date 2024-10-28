@@ -8,12 +8,17 @@ public class Parser {
     
     private List<Token> tokens;
     private Token currentToken;
-    private Token previousToken;
     private List<Token> tokenErrorList;
+    private String newCode;
+
 
     public Parser(List<Token> tokens) {
         this.tokens = tokens;
         this.tokenErrorList = new ArrayList<>();
+    }
+
+    public void translate(String newCode) {
+        System.out.print(" "+ newCode + " ");
     }
 
     public Token getNextToken() {
@@ -95,17 +100,17 @@ public class Parser {
     }
 
     public boolean IFELSE() {
-        if (matchLexeme("se")) {
-            if (matchLexeme("(")) {
+        if (matchLexeme("se", "if ")) {
+            if (matchLexeme("(", "(")) {
                 if (COND()) {
-                    if (matchLexeme(")")) {
-                        if (matchLexeme("{")) {
+                    if (matchLexeme(")", ")")) {
+                        if (matchLexeme("{", "{")) {
                             if (BLOCO()) {
-                                if (matchLexeme("}")) {
-                                    if (matchLexeme("cnao")) {
-                                        if (matchLexeme("{")) {
+                                if (matchLexeme("}", "}")) {
+                                    if (matchLexeme("cnao", "else ")) {
+                                        if (matchLexeme("{", "{")) {
                                             if (BLOCO()) {
-                                                if (matchLexeme("}")) {
+                                                if (matchLexeme("}", "}")) {
                                                     return true;
                                                 }
                                                 error("}", currentToken);
@@ -141,13 +146,13 @@ public class Parser {
     }
     
     public boolean WHILE() {
-        if(matchLexeme("enquanto")){
-            if(matchLexeme("(")){
+        if(matchLexeme("enquanto", "while ")){
+            if(matchLexeme("(", "(")){
                 if(COND()){
-                    if (matchLexeme(")")) {
-                        if(matchLexeme("{")){
+                    if (matchLexeme(")", ")")) {
+                        if(matchLexeme("{", "{")){
                             if(BLOCO()){
-                                if(matchLexeme("}")){
+                                if(matchLexeme("}", "}")){
                                     return true;
                                 }
                                 error("}", currentToken);
@@ -435,7 +440,7 @@ public class Parser {
 
 
     public boolean COND() {
-        if (matchType("ID")) {
+        if (matchType("ID", currentToken.getLexeme())) {
             if (OP()) {
                 if (OP_()) {
                     return true;
@@ -450,22 +455,22 @@ public class Parser {
     }
 
     public boolean OP() {
-        if (matchLexeme("<")) {
+        if (matchLexeme("<", " < ")) {
             return true;
         }
-        else if (matchLexeme(">")) {
+        else if (matchLexeme(">", " > ")) {
             return true;
         }
-        else if (matchLexeme("==")) {
+        else if (matchLexeme("==", " == ")) {
             return true;
         }
-        else if (matchLexeme("<=")) {
+        else if (matchLexeme("<=", " <= ")) {
             return true;
         }
-        else if (matchLexeme(">=")) {
+        else if (matchLexeme(">=", " >= ")) {
             return true;
         }
-        else if (matchLexeme("!=")) {
+        else if (matchLexeme("!=", " != ")) {
             return true;
         }
         error("OP", currentToken);
@@ -473,7 +478,7 @@ public class Parser {
     }
 
     public boolean OP_() {
-        if (matchType("ID")) {
+        if (matchType("ID", currentToken.getLexeme())) {
             return true;
         }
         else if (NUM()) {
@@ -484,7 +489,7 @@ public class Parser {
     }
 
     public boolean ATR() {
-        if (matchType("ID")) {
+        if (matchType("ID", currentToken.getLexeme())) {
             if(X()) {
                 return true;
             }
@@ -496,7 +501,7 @@ public class Parser {
     }
 
     public boolean X() {
-        if (matchLexeme("=")) {
+        if (matchLexeme("=", "=")) {
             if (Y()) {
                 return true;
             }
@@ -507,8 +512,8 @@ public class Parser {
     }
 
     public boolean Y() {
-        if (matchType("TXT")) {
-            if (matchLexeme(";")) {
+        if (matchType("TXT", currentToken.getLexeme())) {
+            if (matchLexeme(";", ";")) {
                 return true;
             }
             error(";", currentToken);
@@ -606,10 +611,12 @@ public class Parser {
     }
 
     public boolean NUM() {
-        if (matchType("INT")) {
+        if (matchType("INT", currentToken.getLexeme())) {
+            translate(";");
             return true;
         }
-        else if (matchType("FLOAT")) {
+        else if (matchType("FLOAT", currentToken.getLexeme())) {
+            translate(";");
             return true;
         }
         return false;
@@ -618,7 +625,15 @@ public class Parser {
 
     public boolean matchLexeme(String lexeme) {
         if (currentToken.getLexeme().equals(lexeme)) {
-            previousToken = currentToken;
+            currentToken = getNextToken();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean matchLexeme(String lexeme, String newCode) {
+        if (currentToken.getLexeme().equals(lexeme)) {
+            translate(newCode);
             currentToken = getNextToken();
             return true;
         }
@@ -627,7 +642,15 @@ public class Parser {
 
     public boolean matchType(String type) {
         if (currentToken.getType().equals(type)) {
-            previousToken = currentToken;
+            currentToken = getNextToken();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean matchType(String type, String newCode) {
+        if (currentToken.getType().equals(type)) {
+            translate(newCode);
             currentToken = getNextToken();
             return true;
         }
@@ -655,5 +678,14 @@ public class Parser {
 
     public Token getCurrentToken() {
         return currentToken;
+    }
+
+    
+    public String getNewCode() {
+        return newCode;
+    }
+
+    public void setNewCode(String newCode) {
+        this.newCode = newCode;
     }
 }
