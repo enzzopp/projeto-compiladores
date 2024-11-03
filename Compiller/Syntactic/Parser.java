@@ -98,7 +98,56 @@ public class Parser {
             }
             return false;
         }
+
+        else if (currentToken.getLexeme().equals("saida")){ // PRINT
+            if(PRINT()){
+                if(BLOCO()){
+                    return true;
+                }
+                return false;
+            }
+            return false;
+        }
+
+        
+
         return true;
+    }
+
+    public boolean PRINT(){
+        if(matchLexeme("saida" , "\n      System.out.printf")){
+            if(matchLexeme("(" , "(")){
+                if(matchType("TXT" , currentToken.getLexeme())){
+                    if(matchLexeme(")", ")")){
+                        if(matchLexeme(";" , ";\n")){
+                            return true;
+                        }
+                        error(";", currentToken);
+                        return false;
+                    }
+                    error(")", currentToken);
+                    return false;
+                }
+
+                
+                else if(matchType("ID" , currentToken.getLexeme())){
+                    if(matchLexeme(")" , ")")){
+                        if(matchLexeme(";" , ";\n")){
+                            return true;
+                        }
+                        error(";", currentToken);
+                        return false;
+                    }
+                    error(")", currentToken);
+                    return false;
+                }
+                error("ID", currentToken);
+                return false;
+            }
+            error("(", currentToken);
+            return false;
+        }
+        return false;
     }
 
     public boolean IFELSE() {
