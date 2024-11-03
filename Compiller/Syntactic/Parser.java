@@ -108,10 +108,27 @@ public class Parser {
             }
             return false;
         }
-
+        else if(currentToken.getLexeme().equals("entrada")){
+            if(INPUT()){
+                if(BLOCO()){
+                    return true;
+                }
+                return false;
+            }
+            return false;
+        }
         
 
         return true;
+    }
+
+    public boolean INPUT(){
+        translate("  import java.util.Scanner");
+        translate("\n    Scanner scanner = new Scanner (System.in);\n");
+        if(matchLexeme("entrada")){
+            return true;
+        }
+        return false;
     }
 
     public boolean PRINT(){
@@ -129,7 +146,18 @@ public class Parser {
                     return false;
                 }
 
-                
+                else if (EXP()){
+                    if(matchLexeme(")" , ")")){
+                        if(matchLexeme(";" , ";\n")){
+                            return true;
+                        }
+                        error(";", currentToken);
+                        return false;
+                    }
+                    error(")", currentToken);
+                    return false;
+                }
+
                 else if(matchType("ID" , currentToken.getLexeme())){
                     if(matchLexeme(")" , ")")){
                         if(matchLexeme(";" , ";\n")){
@@ -566,7 +594,7 @@ public class Parser {
 
     public boolean Y() {
         if (matchType("TXT", currentToken.getLexeme())) {
-            if (matchLexeme(";", ";")) {
+            if (matchLexeme(";")) {
                 return true;
             }
             error(";", currentToken);
@@ -599,14 +627,14 @@ public class Parser {
     }
 
     public boolean R() {
-        if (matchLexeme("+")){
+        if (matchLexeme("+" , "+")){
             if (T()) {
                 if (R()) {
                     return true;
                 }
             }
         }
-        else if (matchLexeme("-")){
+        else if (matchLexeme("-" , "-")){
             if (T()) {
                 if (R()) {
                     return true;
@@ -626,14 +654,14 @@ public class Parser {
     }
 
     public boolean S() {
-        if (matchLexeme("*")) {
+        if (matchLexeme("*" , "*")) {
             if (F()) {
                 if (S()) {
                     return true;
                 }
             }
         }
-        else if (matchLexeme("/")) {
+        else if (matchLexeme("/" , "/")) {
             if (F()) {
                 if (S()) {
                     return true;
@@ -644,9 +672,9 @@ public class Parser {
     }
 
     public boolean F() {
-        if (matchLexeme("(")) {
+        if (matchLexeme("(" , "(")) {
             if (EXP()) {
-                if (matchLexeme(")")) {
+                if (matchLexeme(")" , ")")) {
                     return true;
                 }
                 error(")", currentToken);

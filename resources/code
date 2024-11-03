@@ -1,9 +1,16 @@
 se (a == 1) {
     b = 2;
     saida(b);
+    saida(2+2);
+    saida(2*2);
+    saida(2/2);
+    saida((2/2));
 } cnao {
     b = 3;
     saida(b);
 }
 saida("oi");
 saida(a);
+saida(2+2);
+
+entrada
