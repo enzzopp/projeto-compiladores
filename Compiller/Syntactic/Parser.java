@@ -130,9 +130,14 @@ public class Parser {
                     if(matchLexeme(";", ";\n")){
                         return true;
                     }
+                    error(";", currentToken);
+                    return false;
                 }
+                error(")", currentToken);
+                return false;
             }
-
+            error("(", currentToken);
+            return false;
         }
         return false;
     }
@@ -745,19 +750,17 @@ public class Parser {
     }
 
     public void analyze() {
-        currentToken = getNextToken();
         
         boolean hasImport = false;
         
         for (Token token : tokens) {
-            System.out.println(token.getLexeme().equals("entrada") && !hasImport);
             if (token.getLexeme().equals("entrada") && !hasImport){
                 translate("import java.util.Scanner;\n");
                 hasImport = true;
             }
-            System.out.println(token);
         }
-
+        
+        currentToken = getNextToken();
         translate("public class Code { \n");
         translate("public static void main (String[] args) { \n");
         if(BLOCO()) {
