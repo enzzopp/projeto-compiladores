@@ -123,10 +123,16 @@ public class Parser {
     }
 
     public boolean INPUT(){
-        translate("  import java.util.Scanner");
         translate("\n    Scanner scanner = new Scanner (System.in);\n");
-        if(matchLexeme("entrada")){
-            return true;
+        if(matchLexeme("entrada" , "  scanner.nextLine")){
+            if(matchLexeme("(" , "(")){
+                if(matchLexeme(")" , ")")){
+                    if(matchLexeme(";", ";\n")){
+                        return true;
+                    }
+                }
+            }
+
         }
         return false;
     }
@@ -681,7 +687,7 @@ public class Parser {
                 return false;
             }
         }
-        else if (matchType("ID")) {
+        else if (matchType("ID" , currentToken.getLexeme())) {
             return true;
         }
         else if (NUM()) {
@@ -740,10 +746,25 @@ public class Parser {
 
     public void analyze() {
         currentToken = getNextToken();
+        
+        boolean hasImport = false;
+        
+        for (Token token : tokens) {
+            System.out.println(token.getLexeme().equals("entrada") && !hasImport);
+            if (token.getLexeme().equals("entrada") && !hasImport){
+                translate("import java.util.Scanner;\n");
+                hasImport = true;
+            }
+            System.out.println(token);
+        }
+
         translate("public class Code { \n");
         translate("public static void main (String[] args) { \n");
         if(BLOCO()) {
             if (currentToken.getType().equals("EOF") && tokenErrorList.size() == 0) {
+                if(hasImport){
+                    translate("  scanner.close();\n");
+                }
                 translate("\n  } ");
                 translate("\n} ");
                 System.out.println("\nSyntax is correct!");
