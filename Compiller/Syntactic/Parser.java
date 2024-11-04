@@ -123,7 +123,6 @@ public class Parser {
     }
 
     public boolean INPUT(){
-        translate("\n    Scanner scanner = new Scanner (System.in);\n");
         if(matchLexeme("entrada" , "  scanner.nextLine")){
             if(matchLexeme("(" , "(")){
                 if(matchLexeme(")" , ")")){
@@ -763,6 +762,9 @@ public class Parser {
         currentToken = getNextToken();
         translate("public class Code { \n");
         translate("public static void main (String[] args) { \n");
+        if(hasImport){
+            translate("\n    Scanner scanner = new Scanner (System.in);\n");
+        }
         if(BLOCO()) {
             if (currentToken.getType().equals("EOF") && tokenErrorList.size() == 0) {
                 if(hasImport){
