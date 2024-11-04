@@ -1,4 +1,6 @@
 package Compiller.Syntactic;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -266,17 +268,17 @@ public class Parser {
     }
     
     public boolean FOR() {
-        if (matchLexeme("para")) {
-            if (matchLexeme("(")) {
+        if (matchLexeme("para" , "for")) {
+            if (matchLexeme("(" , "(")) {
                 if (ATR_FOR()) {
-                    if (matchLexeme(";")) {
+                    if (matchLexeme(";" , ";")) {
                         if (COND()) {
-                            if (matchLexeme(";")) {
+                            if (matchLexeme(";",";")) {
                                 if (INC()) {
-                                    if (matchLexeme(")")) {
-                                        if (matchLexeme("{")) {
+                                    if (matchLexeme(")",")")) {
+                                        if (matchLexeme("{","{")) {
                                             if (BLOCO()) {
-                                                if (matchLexeme("}")) {
+                                                if (matchLexeme("}","}")) {
                                                     return true;
                                                 }
                                                 error("}", currentToken);
@@ -464,13 +466,13 @@ public class Parser {
     }
         
     public boolean ATR_FOR() {
-        if (matchLexeme("inteiro")) {
-            if (matchType("ID")) {
-                if (matchLexeme("=")) {
+        if (matchLexeme("inteiro", "int")) {
+            if (matchType("ID" , currentToken.getLexeme())) {
+                if (matchLexeme("=" , "=")) {
                     if (NUM()) {
                         return true;
                     }
-                    else if (matchType("ID")) {
+                    else if (matchType("ID" , currentToken.getLexeme())) {
                         return true;
                     }
                     error("ID or NUM", currentToken);
@@ -487,9 +489,9 @@ public class Parser {
     }
 
     public boolean INC() {
-        if (matchType("ID")) {
-            if (matchLexeme("=")) {
-                if (matchType("ID")) {
+        if (matchType("ID" , currentToken.getLexeme())) {
+            if (matchLexeme("=" , "=")) {
+                if (matchType("ID" , currentToken.getLexeme())) {
                     if (OP_MAT()) {
                         if (NUM()) {
                             return true;
@@ -511,16 +513,16 @@ public class Parser {
     }
 
     public boolean OP_MAT() {
-        if (matchLexeme("+")) {
+        if (matchLexeme("+" , "+")) {
             return true;
         }
-        else if (matchLexeme("-")) {
+        else if (matchLexeme("-" , "-")) {
             return true;
         }
-        else if (matchLexeme("/")) {
+        else if (matchLexeme("/" , "/")) {
             return true;
         }
-        else if (matchLexeme("*")) {
+        else if (matchLexeme("*" , "*")) {
             return true;
         }
         error("+ | - | / | *", currentToken);
@@ -579,9 +581,9 @@ public class Parser {
 
     public boolean ATR() {
         translate("          ");
-        if (matchType("ID", currentToken.getLexeme())) {
+        if (matchType("ID", "\n        "+currentToken.getLexeme())) {
             if(X()) {
-                translate(";");
+                translate(";\n");
                 return true;
             }
             error("=", currentToken);
@@ -748,6 +750,16 @@ public class Parser {
         return false;
     }
 
+    public void createJavaTranslateFile(String path , StringBuilder contents){
+
+        try (FileWriter writer = new FileWriter(path)){
+            writer.write(contents.toString());
+            System.out.println("ESCREVEU NO ARQUIVO!");
+        } catch (IOException e) {
+            System.err.println("ERRO ao escrever no arquivo: " + e.getMessage());
+        }
+    }
+
     public void analyze() {
         
         boolean hasImport = false;
@@ -774,6 +786,7 @@ public class Parser {
                 translate("\n} ");
                 System.out.println("\nSyntax is correct!");
                 System.out.println(code.toString());
+                createJavaTranslateFile("resources/javaTranslate", code);
             } 
             else {
                 error("EOF", currentToken);

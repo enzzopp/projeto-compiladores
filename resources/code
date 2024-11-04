@@ -1,3 +1,26 @@
 entrada();
 entrada();
 entrada();
+
+se (a == 1) {
+    b = 2;
+    entrada();
+    saida(b);
+    saida(2+2);
+    saida(2*2);
+    saida(2/2);
+    saida((2/2));
+} cnao {
+    entrada();
+    b = 3;
+    saida(b);
+}
+saida("oi");
+saida(a);
+saida(2+2);
+entrada();
+
+para(inteiro i = 0 ; i < 10 ; i = i + 1){
+    a = 2;
+    saida(a);
+}
