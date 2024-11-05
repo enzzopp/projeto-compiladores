@@ -3,6 +3,7 @@ import Compiller.Lexic.Code;
 import Compiller.Lexic.Lexer;
 import Compiller.Lexic.Token;
 import Compiller.Syntactic.ParserJava;
+import Compiller.Syntactic.ParserC;
 
 public class Main {
     public static void main(String[] args) {
@@ -20,8 +21,16 @@ public class Main {
             // System.out.println(token);
         }
 
-        ParserJava parser = new ParserJava(tokens);
-
-        parser.analyze();
+        if (args.length > 0 && args[0].equals("-j")) {
+            ParserJava parser = new ParserJava(tokens);
+            parser.analyze();
+        }
+        else if (args.length > 0 && args[0].equals("-c")) {
+            ParserC parser = new ParserC(tokens);
+            parser.analyze();
+        }
+        else {
+            System.out.println("Invalid argument");
+        }
     }
 }

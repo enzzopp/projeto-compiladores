@@ -6,7 +6,7 @@ import java.util.List;
 
 import Compiller.Lexic.Token;
 
-public class ParserJava {
+public class ParserC {
     
     StringBuilder code = new StringBuilder();
     private List<Token> tokens;
@@ -15,7 +15,7 @@ public class ParserJava {
     private String newCode;
 
 
-    public ParserJava(List<Token> tokens) {
+    public ParserC(List<Token> tokens) {
         this.tokens = tokens;
         this.tokenErrorList = new ArrayList<>();
     }
@@ -812,7 +812,7 @@ public class ParserJava {
                 }
                 translate("} \n");
                 translate("} \n");
-                // System.out.println("Syntax is correct!");
+                System.out.println("Syntax is right!");
                 createJavaTranslateFile("resources/JavaTranslate.java", code);
             } 
             else {
