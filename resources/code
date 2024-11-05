@@ -1,26 +1,36 @@
-entrada();
-entrada();
-entrada();
+inteiro a = entrada();
+decimal b = entrada();
+texto b = entrada();
+inteiro teste = 2 + 2;
+decimal teste2 = 2.2 + 2.4;
+texto teste3 = "testando";
 
 se (a == 1) {
     b = 2;
-    entrada();
+    inteiro c = entrada();
     saida(b);
     saida(2+2);
     saida(2*2);
     saida(2/2);
     saida((2/2));
 } cnao {
-    entrada();
+    inteiro d = entrada();
     b = 3;
     saida(b);
 }
 saida("oi");
 saida(a);
 saida(2+2);
-entrada();
+inteiro e = entrada();
 
 para(inteiro i = 0 ; i < 10 ; i = i + 1){
     a = 2;
     saida(a);
 }
+
+enquanto(a == 2){
+    a = 1;
+}
+
+estado a = real;
+estado b = barça;
