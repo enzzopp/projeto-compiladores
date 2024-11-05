@@ -2,7 +2,7 @@ import java.util.List;
 import Compiller.Lexic.Code;
 import Compiller.Lexic.Lexer;
 import Compiller.Lexic.Token;
-import Compiller.Syntactic.Parser;
+import Compiller.Syntactic.ParserJava;
 
 public class Main {
     public static void main(String[] args) {
@@ -20,7 +20,7 @@ public class Main {
             // System.out.println(token);
         }
 
-        Parser parser = new Parser(tokens);
+        ParserJava parser = new ParserJava(tokens);
 
         parser.analyze();
     }
