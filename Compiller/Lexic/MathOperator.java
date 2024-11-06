@@ -16,9 +16,6 @@ public class MathOperator extends AFD{
             case '*' :
                 code.next();
                 return new Token("MUL", "*", line);
-            case '%' :
-                code.next();
-                return new Token("MOD", "%", line);
 
             case '/' :
                 code.next();

@@ -18,7 +18,7 @@ public class Main {
         tokens = lexer.getTokens();
 
         for (Token token : tokens) {
-            // System.out.println(token);
+            System.out.println(token);
         }
 
         if (args.length > 0 && args[0].equals("-j")) {
@@ -28,9 +28,6 @@ public class Main {
         else if (args.length > 0 && args[0].equals("-c")) {
             ParserC parser = new ParserC(tokens);
             parser.analyze();
-        }
-        else {
-            System.out.println("Invalid argument");
         }
     }
 }

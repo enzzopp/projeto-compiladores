@@ -12,14 +12,14 @@ public class LogicalOperator extends AFD {
                     code.next();
                     return new Token("AND", "&&", line);
                 }
-                return new Token("BIT-AND", "&", line);
+                return null;
             case '|' :
                 code.next();
                 if (code.current() == '|'){
                     code.next();
                     return new Token("OR", "||", line);
                 }
-                return new Token("BIT-OR", "|", line);
+                return null;
             case '!' :
                 code.next();
                 return new Token("NOT", "!", line);

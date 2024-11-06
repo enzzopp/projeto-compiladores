@@ -6,9 +6,14 @@ public class Float extends AFD {
     @Override
     public Token evaluate(CharacterIterator code, int line) {
 
-        if (Character.isDigit(code.current()) || code.current() == '.'){
+        if (Character.isDigit(code.current())){
 
             String lexeme = readNumber(code);
+
+            if (lexeme.charAt(lexeme.length()-1) == '.'){
+                return null;
+            }
+
 
             if (endNumber(code) && !lexeme.equals(".")){
                 return new Token("FLOAT", lexeme, line);

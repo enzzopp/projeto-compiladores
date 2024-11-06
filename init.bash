@@ -11,4 +11,7 @@ case "$1" in
         java Main -c
         
         ;;
+    *)
+        echo "Opção inválida, use -j para executar o programa em Java ou -c para executar o programa em C"
+        ;;
 esac
