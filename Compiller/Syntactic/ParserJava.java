@@ -633,21 +633,6 @@ public class ParserJava {
             error(";", currentToken);
             return false;
         }
-        else if(matchLexeme("entrada", "scanner.nextLine")){
-            if(matchLexeme("(" , "(")){
-                if(matchLexeme(")" , ")")){
-                    if(matchLexeme(";", ";\n")){
-                        return true;
-                    }
-                    error(";", currentToken);
-                    return false;
-                }
-                error(")", currentToken);
-                return false;
-            }
-            error("(", currentToken);
-            return false;
-        }
         else if (EXP()) {
             if (matchLexeme(";")) {
                 return true;
@@ -728,7 +713,7 @@ public class ParserJava {
         else if (NUM()) {
             return true;
         }
-        error("ID or NUM or Entrada or EXP", currentToken);
+        error("ID or inteiro or decimal", currentToken);
         return false;
     }
 
