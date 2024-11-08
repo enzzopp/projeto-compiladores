@@ -11,7 +11,7 @@
   for  (  int  i  =  0  ;
   i   <   5  ;
   i  =  i  +  1  )  {  System.out.println  (  "Iteração número: "  )  ;
-  System.out.println  (  i  )  ;
+  System.out.println  (  k  )  ;
   }  System.out.println  (  k  )  ;
   System.out.println  (  teste3  )  ;
   boolean  ak  =  true  ;

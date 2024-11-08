@@ -1,5 +1,6 @@
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import Compiller.Lexic.Code;
 import Compiller.Lexic.Lexer;
@@ -29,6 +30,8 @@ public class Main {
     public static void main(String[] args) {
 
         List<Token> tokens;
+        List<Token> tokensSemantic;
+        
         String path = "resources/code";
 
         Code f1 = new Code(path);
@@ -36,22 +39,28 @@ public class Main {
         Lexer lexer = new Lexer(f1.getCodeString());
         
         tokens = lexer.getTokens();
+        tokensSemantic = new ArrayList<>();
 
         for (Token token : tokens) {
+            Token tokenSemantic = new Token(token.getType(),token.getLexeme(), token.getLine());
+            tokensSemantic.add(tokenSemantic);
+        }
+
+        for (Token token : tokensSemantic) {
             // System.out.println(token);
         }
-        
+
         boolean isCorrect = false;
-        Semantic semantic = new Semantic(tokens);
         
         if (args.length > 0 && args[0].equals("-j")) {
             ParserJava parser = new ParserJava(tokens);
             isCorrect = parser.analyze();
+
+            Semantic semantic = new Semantic(tokensSemantic);
+            isCorrect = semantic.analyze() && isCorrect;
+
             if (isCorrect) {
-                isCorrect = semantic.analyze();
-                if (isCorrect) {
-                   createJavaTranslateFile("resources/JavaTranslate.java", parser.getCode());
-                }
+                createJavaTranslateFile("resources/JavaTranslate.java", parser.getCode());
             }
         }
         else if (args.length > 0 && args[0].equals("-c")) {

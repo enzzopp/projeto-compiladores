@@ -6,7 +6,7 @@ inteiro teste = 2 + 2;
 decimal teste2 = 2.2 + 2.4;
 texto teste3 = "testando";
 
-para (inteiro i = 0; i < 5; i = i + 1) {
+para (i = 0; i < 5; i = i + 1) {
     saida("Iteração número: ");
     saida(k);
 }
