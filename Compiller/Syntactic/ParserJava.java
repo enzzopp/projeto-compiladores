@@ -8,12 +8,21 @@ import Compiller.Lexic.Token;
 
 public class ParserJava {
     
-    StringBuilder code = new StringBuilder();
+    private StringBuilder code = new StringBuilder();
+
+    
     private List<Token> tokens;
     private Token currentToken;
     private List<Token> tokenErrorList;
     private String newCode;
+    
+    public StringBuilder getCode() {
+        return code;
+    }
 
+    public void setCode(StringBuilder code) {
+        this.code = code;
+    }
 
     public ParserJava(List<Token> tokens) {
         this.tokens = tokens;
@@ -128,7 +137,19 @@ public class ParserJava {
                     return false;
                 }
 
-                else if (EXP()){
+                else if (EXPI()){
+                    if(matchLexeme(")" , ")")){
+                        if(matchLexeme(";" , ";\n")){
+                            return true;
+                        }
+                        error(";", currentToken);
+                        return false;
+                    }
+                    error(")", currentToken);
+                    return false;
+                }
+
+                else if (EXPF()){
                     if(matchLexeme(")" , ")")){
                         if(matchLexeme(";" , ";\n")){
                             return true;
@@ -168,7 +189,7 @@ public class ParserJava {
                         if (matchLexeme("{", "{\n")) {
                             if (BLOCO()) {
                                 if (matchLexeme("}", "}\n")) {
-                                    if (matchLexeme("cnao", "    else")) {
+                                    if (matchLexeme("senao", "    else")) {
                                         if (matchLexeme("{", "{\n")) {
                                             if (BLOCO()) {
                                                 if (matchLexeme("}", "}\n")) {
@@ -182,7 +203,7 @@ public class ParserJava {
                                         error("{", currentToken);
                                         return false;
                                     }
-                                    error("cnao", currentToken);
+                                    error("senao", currentToken);
                                     return false;
                                 }
                                 error("}", currentToken);
@@ -322,7 +343,7 @@ public class ParserJava {
                         error("(", currentToken);
                         return false;
                     }
-                    else if (EXP()) {
+                    else if (EXPI()) {
                         if (matchLexeme(";" , ";\n")) {
                             return true;
                         }
@@ -363,7 +384,7 @@ public class ParserJava {
                         error("(", currentToken);
                         return false;
                     }
-                    else if (EXP()) {
+                    else if (EXPF()) {
                         if (matchLexeme(";" , ";\n")) {
                             return true;
                         }
@@ -508,10 +529,10 @@ public class ParserJava {
             if (matchLexeme("=" , "=")) {
                 if (matchType("ID" , currentToken.getLexeme())) {
                     if (OP_MAT()) {
-                        if (NUM()) {
+                        if (NUMI()) {
                             return true;
                         }
-                        error("NUM", currentToken);
+                        error("inteiro", currentToken);
                         return false;
                     }
                     error("OP_MAT", currentToken);
@@ -633,7 +654,14 @@ public class ParserJava {
             error(";", currentToken);
             return false;
         }
-        else if (EXP()) {
+        else if (EXPI()) {
+            if (matchLexeme(";")) {
+                return true;
+            }
+            error(";", currentToken);
+            return false;
+        }
+        else if (EXPF()) {
             if (matchLexeme(";")) {
                 return true;
             }
@@ -643,26 +671,35 @@ public class ParserJava {
         return false;
     }
 
-    public boolean EXP() {
-        if (T()) {
-            if (R()) {
+    public boolean EXPI() {
+        if (TI()) {
+            if (RI()) {
                 return true;
             }
         }
         return false;
     }
 
-    public boolean R() {
+    public boolean EXPF() {
+        if (TF()) {
+            if (RF()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean RI() {
         if (matchLexeme("+" , "+")){
-            if (T()) {
-                if (R()) {
+            if (TI()) {
+                if (RI()) {
                     return true;
                 }
             }
         }
         else if (matchLexeme("-" , "-")){
-            if (T()) {
-                if (R()) {
+            if (TI()) {
+                if (RI()) {
                     return true;
                 }
             }
@@ -670,26 +707,71 @@ public class ParserJava {
         return true;
     }
 
-    public boolean T() {
-        if (F()){
-            if (S()) {
+    public boolean RF() {
+        if (matchLexeme("+" , "+")){
+            if (TF()) {
+                if (RF()) {
+                    return true;
+                }
+            }
+        }
+        else if (matchLexeme("-" , "-")){
+            if (TF()) {
+                if (RF()) {
+                    return true;
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean TI() {
+        if (FI()){
+            if (SI()) {
                 return true;
             }
         }
         return false;
     }
 
-    public boolean S() {
+    public boolean TF() {
+        if (FF()){
+            if (SF()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean SI() {
         if (matchLexeme("*" , "*")) {
-            if (F()) {
-                if (S()) {
+            if (FI()) {
+                if (SI()) {
                     return true;
                 }
             }
         }
         else if (matchLexeme("/" , "/")) {
-            if (F()) {
-                if (S()) {
+            if (FI()) {
+                if (SI()) {
+                    return true;
+                }
+            }
+        }
+        return true;
+    }
+    
+    public boolean SF() {
+        if (matchLexeme("*" , "*")) {
+            if (FF()) {
+                if (SF()) {
+                    return true;
+                }
+            }
+        }
+        else if (matchLexeme("/" , "/")) {
+            if (FF()) {
+                if (SF()) {
                     return true;
                 }
             }
@@ -697,9 +779,29 @@ public class ParserJava {
         return true;
     }
 
-    public boolean F() {
+    public boolean FI() {
         if (matchLexeme("(" , "(")) {
-            if (EXP()) {
+            if (EXPI()) {
+                if (matchLexeme(")" , ")")) {
+                    return true;
+                }
+                error(")", currentToken);
+                return false;
+            }
+        }
+        else if (matchType("ID" , currentToken.getLexeme())) {
+            return true;
+        }
+        else if (NUMI()) {
+            return true;
+        }
+        error("ID or inteiro", currentToken);
+        return false;
+    }
+
+    public boolean FF() {
+        if (matchLexeme("(" , "(")) {
+            if (EXPF()) {
                 if (matchLexeme(")" , ")")) {
                     return true;
                 }
@@ -713,23 +815,27 @@ public class ParserJava {
         else if (NUM()) {
             return true;
         }
-        error("ID or inteiro or decimal", currentToken);
+        error("ID or EXP", currentToken);
+        return false;
+    }
+
+    public boolean NUMI() {
+        if (matchType("INT", currentToken.getLexeme())) {
+            return true;
+        }
         return false;
     }
 
     public boolean NUM() {
         if (matchType("INT", currentToken.getLexeme())) {
-            //translate(";");
             return true;
         }
-        else if (matchType("FLOAT", currentToken.getLexeme())) {
-            //translate(";");
+        else if (matchType("FLOAT", currentToken.getLexeme())){
             return true;
         }
         return false;
     }
     
-
     public boolean matchLexeme(String lexeme) {
         if (currentToken.getLexeme().equals(lexeme)) {
             currentToken = getNextToken();
@@ -764,16 +870,7 @@ public class ParserJava {
         return false;
     }
 
-    public void createJavaTranslateFile(String path , StringBuilder contents){
-
-        try (FileWriter writer = new FileWriter(path)){
-            writer.write(contents.toString());
-        } catch (IOException e) {
-            System.err.println("ERRO ao escrever no arquivo: " + e.getMessage());
-        }
-    }
-
-    public void analyze() {
+    public boolean analyze() {
         
         boolean hasImport = false;
         
@@ -798,14 +895,16 @@ public class ParserJava {
                 translate("} \n");
                 translate("} \n");
                 // System.out.println("Syntax is correct!");
-                createJavaTranslateFile("resources/JavaTranslate.java", code);
+                return true;
             } 
             else {
                 error("EOF", currentToken);
+                return false;
             }
         }
         else {
             error("BLOCO", currentToken);
+            return false;
         }
     }
 

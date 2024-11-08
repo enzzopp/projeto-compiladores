@@ -9,7 +9,13 @@ case "$1" in
         ;;
     -c)
         java Main -c
+        cd resources/
+        g++ CppTranslate.cpp -o CppTranslate
+        ./CppTranslate
         
+        ;;
+    *)
+        echo "Opção inválida, use -j para executar o programa em Java ou -c para executar o programa em C"
         ;;
 esac
 

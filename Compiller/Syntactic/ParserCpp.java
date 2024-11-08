@@ -6,23 +6,31 @@ import java.util.List;
 
 import Compiller.Lexic.Token;
 
-public class ParserC {
+public class ParserCpp {
     
-    StringBuilder code = new StringBuilder();
+    private StringBuilder code = new StringBuilder();
+
+    
     private List<Token> tokens;
     private Token currentToken;
     private List<Token> tokenErrorList;
     private String newCode;
+    
+    public StringBuilder getCode() {
+        return code;
+    }
 
+    public void setCode(StringBuilder code) {
+        this.code = code;
+    }
 
-    public ParserC(List<Token> tokens) {
+    public ParserCpp(List<Token> tokens) {
         this.tokens = tokens;
         this.tokenErrorList = new ArrayList<>();
     }
 
     public void translate(String newCode) {
         code.append(" "+ newCode + " ");
-        //System.out.print(" "+ newCode + " ");
     }
 
     public Token getNextToken() {
@@ -114,10 +122,10 @@ public class ParserC {
     }
 
     public boolean PRINT(){
-        if(matchLexeme("saida" , "System.out.println")){
-            if(matchLexeme("(" , "(")){
+        if(matchLexeme("saida" , "cout << ")){
+            if(matchLexeme("(" , "")){
                 if(matchType("TXT" , currentToken.getLexeme())){
-                    if(matchLexeme(")", ")")){
+                    if(matchLexeme(")", "<< endl")){
                         if(matchLexeme(";" , ";\n")){
                             return true;
                         }
@@ -128,9 +136,21 @@ public class ParserC {
                     return false;
                 }
 
-                else if (EXP()){
-                    if(matchLexeme(")" , ")")){
+                else if (EXPI()){
+                    if(matchLexeme(")", "<< endl")){
                         if(matchLexeme(";" , ";\n")){
+                            return true;
+                        }
+                        error(";", currentToken);
+                        return false;
+                    }
+                    error(")", currentToken);
+                    return false;
+                }
+
+                else if (EXPF()){
+                    if(matchLexeme(")", "<< endl")){
+                        if(matchLexeme(";", ";\n")){
                             return true;
                         }
                         error(";", currentToken);
@@ -141,7 +161,7 @@ public class ParserC {
                 }
 
                 else if(matchType("ID" , currentToken.getLexeme())){
-                    if(matchLexeme(")" , ")")){
+                    if(matchLexeme(")" , "<< endl")){
                         if(matchLexeme(";" , ";\n")){
                             return true;
                         }
@@ -168,7 +188,7 @@ public class ParserC {
                         if (matchLexeme("{", "{\n")) {
                             if (BLOCO()) {
                                 if (matchLexeme("}", "}\n")) {
-                                    if (matchLexeme("cnao", "    else")) {
+                                    if (matchLexeme("senao", "    else")) {
                                         if (matchLexeme("{", "{\n")) {
                                             if (BLOCO()) {
                                                 if (matchLexeme("}", "}\n")) {
@@ -182,7 +202,7 @@ public class ParserC {
                                         error("{", currentToken);
                                         return false;
                                     }
-                                    error("cnao", currentToken);
+                                    error("senao", currentToken);
                                     return false;
                                 }
                                 error("}", currentToken);
@@ -241,9 +261,9 @@ public class ParserC {
         if (matchLexeme("para" , "for")) {
             if (matchLexeme("(" , "(")) {
                 if (ATR_FOR()) {
-                    if (matchLexeme(";" , ";\n")) {
+                    if (matchLexeme(";" , ";")) {
                         if (COND()) {
-                            if (matchLexeme(";", ";\n")) {
+                            if (matchLexeme(";", ";")) {
                                 if (INC()) {
                                     if (matchLexeme(")",")")) {
                                         if (matchLexeme("{","{")) {
@@ -302,14 +322,15 @@ public class ParserC {
 
     public boolean INT() {
         if (matchLexeme("inteiro" , "int")) {
+            String tokenId = currentToken.getLexeme();
             if (matchType("ID" , currentToken.getLexeme())) {
                 if (matchLexeme(";" , ";\n")) {
                     return true;
                 }
                 else if (matchLexeme("=" , "=")) {
-                    if(matchLexeme("entrada", "scanner.nextInt")){
-                        if(matchLexeme("(" , "(")){
-                            if(matchLexeme(")" , ")")){
+                    if(matchLexeme("entrada", "0;\ncin >> ")){
+                        if(matchLexeme("(" , tokenId)){
+                            if(matchLexeme(")" , "")){
                                 if(matchLexeme(";", ";\n")){
                                     return true;
                                 }
@@ -322,7 +343,7 @@ public class ParserC {
                         error("(", currentToken);
                         return false;
                     }
-                    else if (EXP()) {
+                    else if (EXPI()) {
                         if (matchLexeme(";" , ";\n")) {
                             return true;
                         }
@@ -342,15 +363,16 @@ public class ParserC {
     }
 
     public boolean FLOAT() {
-        if (matchLexeme("decimal" , "double")) {
+        if (matchLexeme("decimal" , "float")) {
+            String tokenId = currentToken.getLexeme();
             if (matchType("ID" , currentToken.getLexeme())) {
                 if (matchLexeme(";" , ";\n")) {
                     return true;
                 }
                 else if (matchLexeme("=" , "=")) {
-                    if(matchLexeme("entrada", "scanner.nextFloat")){
-                        if(matchLexeme("(" , "(")){
-                            if(matchLexeme(")" , ")")){
+                    if(matchLexeme("entrada", "0;\ncin >> ")){
+                        if(matchLexeme("(" , tokenId)){
+                            if(matchLexeme(")" , "")){
                                 if(matchLexeme(";", ";\n")){
                                     return true;
                                 }
@@ -363,7 +385,7 @@ public class ParserC {
                         error("(", currentToken);
                         return false;
                     }
-                    else if (EXP()) {
+                    else if (EXPF()) {
                         if (matchLexeme(";" , ";\n")) {
                             return true;
                         }
@@ -383,9 +405,11 @@ public class ParserC {
     }
 
     public boolean STRING() {
-        if (matchLexeme("texto" , "String")) {
+        if (matchLexeme("texto" , "string")) {
+            String tokenId = currentToken.getLexeme();
             if (matchType("ID" , currentToken.getLexeme())) {
-                if (STRING_()) {
+
+                if (STRING_(tokenId)) {
                     return true;
                 }
                 error("; or =", currentToken);
@@ -397,14 +421,14 @@ public class ParserC {
         return false;
     }
 
-    public boolean STRING_() {
+    public boolean STRING_(String tokenId) {
         if (matchLexeme(";" , ";\n")) {
             return true;
         }
         else if (matchLexeme("=" , "=")) {
-            if(matchLexeme("entrada", "scanner.nextLine")){
-                if(matchLexeme("(" , "(")){
-                    if(matchLexeme(")" , ")")){
+            if(matchLexeme("entrada", "\"\";\ncin >> ")){
+                if(matchLexeme("(" , tokenId)){
+                    if(matchLexeme(")" , "")){
                         if(matchLexeme(";", ";\n")){
                             return true;
                         }
@@ -432,7 +456,7 @@ public class ParserC {
     }
 
     public boolean BOOLEAN() {
-        if (matchLexeme("estado" , "boolean")) {
+        if (matchLexeme("estado" , "bool")) {
             if (matchType("ID" , currentToken.getLexeme())) {
                 if (BOOLEAN_()) {
                     return true;
@@ -454,7 +478,7 @@ public class ParserC {
             if (BOOLEAN__()) {
                 return true;
             }
-            error("BOOLEAN__", currentToken);
+            error("BOOLEAN", currentToken);
             return false;
         }
         error("; or =", currentToken);
@@ -508,10 +532,10 @@ public class ParserC {
             if (matchLexeme("=" , "=")) {
                 if (matchType("ID" , currentToken.getLexeme())) {
                     if (OP_MAT()) {
-                        if (NUM()) {
+                        if (NUMI()) {
                             return true;
                         }
-                        error("NUM", currentToken);
+                        error("inteiro", currentToken);
                         return false;
                     }
                     error("OP_MAT", currentToken);
@@ -633,22 +657,14 @@ public class ParserC {
             error(";", currentToken);
             return false;
         }
-        else if(matchLexeme("entrada", "scanner.nextLine")){
-            if(matchLexeme("(" , "(")){
-                if(matchLexeme(")" , ")")){
-                    if(matchLexeme(";", ";\n")){
-                        return true;
-                    }
-                    error(";", currentToken);
-                    return false;
-                }
-                error(")", currentToken);
-                return false;
+        else if (EXPI()) {
+            if (matchLexeme(";")) {
+                return true;
             }
-            error("(", currentToken);
+            error(";", currentToken);
             return false;
         }
-        else if (EXP()) {
+        else if (EXPF()) {
             if (matchLexeme(";")) {
                 return true;
             }
@@ -658,26 +674,35 @@ public class ParserC {
         return false;
     }
 
-    public boolean EXP() {
-        if (T()) {
-            if (R()) {
+    public boolean EXPI() {
+        if (TI()) {
+            if (RI()) {
                 return true;
             }
         }
         return false;
     }
 
-    public boolean R() {
+    public boolean EXPF() {
+        if (TF()) {
+            if (RF()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean RI() {
         if (matchLexeme("+" , "+")){
-            if (T()) {
-                if (R()) {
+            if (TI()) {
+                if (RI()) {
                     return true;
                 }
             }
         }
         else if (matchLexeme("-" , "-")){
-            if (T()) {
-                if (R()) {
+            if (TI()) {
+                if (RI()) {
                     return true;
                 }
             }
@@ -685,26 +710,71 @@ public class ParserC {
         return true;
     }
 
-    public boolean T() {
-        if (F()){
-            if (S()) {
+    public boolean RF() {
+        if (matchLexeme("+" , "+")){
+            if (TF()) {
+                if (RF()) {
+                    return true;
+                }
+            }
+        }
+        else if (matchLexeme("-" , "-")){
+            if (TF()) {
+                if (RF()) {
+                    return true;
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean TI() {
+        if (FI()){
+            if (SI()) {
                 return true;
             }
         }
         return false;
     }
 
-    public boolean S() {
+    public boolean TF() {
+        if (FF()){
+            if (SF()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean SI() {
         if (matchLexeme("*" , "*")) {
-            if (F()) {
-                if (S()) {
+            if (FI()) {
+                if (SI()) {
                     return true;
                 }
             }
         }
         else if (matchLexeme("/" , "/")) {
-            if (F()) {
-                if (S()) {
+            if (FI()) {
+                if (SI()) {
+                    return true;
+                }
+            }
+        }
+        return true;
+    }
+    
+    public boolean SF() {
+        if (matchLexeme("*" , "*")) {
+            if (FF()) {
+                if (SF()) {
+                    return true;
+                }
+            }
+        }
+        else if (matchLexeme("/" , "/")) {
+            if (FF()) {
+                if (SF()) {
                     return true;
                 }
             }
@@ -712,9 +782,29 @@ public class ParserC {
         return true;
     }
 
-    public boolean F() {
+    public boolean FI() {
         if (matchLexeme("(" , "(")) {
-            if (EXP()) {
+            if (EXPI()) {
+                if (matchLexeme(")" , ")")) {
+                    return true;
+                }
+                error(")", currentToken);
+                return false;
+            }
+        }
+        else if (matchType("ID" , currentToken.getLexeme())) {
+            return true;
+        }
+        else if (NUMI()) {
+            return true;
+        }
+        error("ID or inteiro", currentToken);
+        return false;
+    }
+
+    public boolean FF() {
+        if (matchLexeme("(" , "(")) {
+            if (EXPF()) {
                 if (matchLexeme(")" , ")")) {
                     return true;
                 }
@@ -728,23 +818,27 @@ public class ParserC {
         else if (NUM()) {
             return true;
         }
-        error("ID or NUM or Entrada or EXP", currentToken);
+        error("ID or EXP", currentToken);
+        return false;
+    }
+
+    public boolean NUMI() {
+        if (matchType("INT", currentToken.getLexeme())) {
+            return true;
+        }
         return false;
     }
 
     public boolean NUM() {
         if (matchType("INT", currentToken.getLexeme())) {
-            //translate(";");
             return true;
         }
-        else if (matchType("FLOAT", currentToken.getLexeme())) {
-            //translate(";");
+        else if (matchType("FLOAT", currentToken.getLexeme())){
             return true;
         }
         return false;
     }
     
-
     public boolean matchLexeme(String lexeme) {
         if (currentToken.getLexeme().equals(lexeme)) {
             currentToken = getNextToken();
@@ -779,48 +873,27 @@ public class ParserC {
         return false;
     }
 
-    public void createJavaTranslateFile(String path , StringBuilder contents){
-
-        try (FileWriter writer = new FileWriter(path)){
-            writer.write(contents.toString());
-        } catch (IOException e) {
-            System.err.println("ERRO ao escrever no arquivo: " + e.getMessage());
-        }
-    }
-
-    public void analyze() {
-        
-        boolean hasImport = false;
-        
-        for (Token token : tokens) {
-            if (token.getLexeme().equals("entrada") && !hasImport){
-                translate("import java.util.Scanner;\n");
-                hasImport = true;
-            }
-        }
+    public boolean analyze() {
         
         currentToken = getNextToken();
-        translate("public class JavaTranslate { \n");
-        translate("public static void main (String[] args) {\n");
-        if(hasImport){
-            translate("Scanner scanner = new Scanner (System.in);\n");
-        }
+        translate("#include <iostream>\n");
+        translate("#include <string>\n");
+        translate("using namespace std;\n");
+        translate("int main() {\n");
         if(BLOCO()) {
             if (currentToken.getType().equals("EOF") && tokenErrorList.size() == 0) {
-                if(hasImport){
-                    translate("  scanner.close();\n");
-                }
+                translate("return 0;\n");
                 translate("} \n");
-                translate("} \n");
-                System.out.println("Syntax is right!");
-                createJavaTranslateFile("resources/JavaTranslate.java", code);
+                return true;
             } 
             else {
                 error("EOF", currentToken);
+                return false;
             }
         }
         else {
             error("BLOCO", currentToken);
+            return false;
         }
     }
 

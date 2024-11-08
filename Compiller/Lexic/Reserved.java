@@ -18,7 +18,6 @@ public class Reserved extends AFD{
         RESERVED_WORDS.add("enquanto"); // while
         RESERVED_WORDS.add("se"); //if
         RESERVED_WORDS.add("senao"); //else
-        RESERVED_WORDS.add("ou"); //else if
         RESERVED_WORDS.add("saida"); //output
         RESERVED_WORDS.add("entrada"); //input
     }
