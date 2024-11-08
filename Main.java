@@ -66,6 +66,9 @@ public class Main {
         else if (args.length > 0 && args[0].equals("-c")) {
             ParserCpp parser = new ParserCpp(tokens);
             isCorrect = parser.analyze();
+
+            Semantic semantic = new Semantic(tokensSemantic);
+            isCorrect = semantic.analyze() && isCorrect;
             if (isCorrect) {
                 createCppTranslateFile("resources/CppTranslate.cpp", parser.getCode());
             }
