@@ -37,6 +37,8 @@ public class Main {
         Code f1 = new Code(path);
         
         Lexer lexer = new Lexer(f1.getCodeString());
+
+        Statics s = new Statics(lexer.getTokens());
         
         tokens = lexer.getTokens();
         tokensSemantic = new ArrayList<>();
@@ -61,6 +63,8 @@ public class Main {
 
             if (isCorrect) {
                 createJavaTranslateFile("resources/JavaTranslate.java", parser.getCode());
+                s.countCaracters("resources/code");
+                
             }
         }
         else if (args.length > 0 && args[0].equals("-c")) {
