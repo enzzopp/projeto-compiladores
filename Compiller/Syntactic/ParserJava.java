@@ -369,7 +369,7 @@ public class ParserJava {
                     return true;
                 }
                 else if (matchLexeme("=" , "=")) {
-                    if(matchLexeme("entrada", "scanner.nextFloat")){
+                    if(matchLexeme("entrada", "scanner.nextDouble")){
                         if(matchLexeme("(" , "(")){
                             if(matchLexeme(")" , ")")){
                                 if(matchLexeme(";", ";\n")){

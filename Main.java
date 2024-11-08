@@ -69,6 +69,7 @@ public class Main {
 
             Semantic semantic = new Semantic(tokensSemantic);
             isCorrect = semantic.analyze() && isCorrect;
+            
             if (isCorrect) {
                 createCppTranslateFile("resources/CppTranslate.cpp", parser.getCode());
             }
