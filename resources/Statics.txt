@@ -1,7 +1,7 @@
 ----- CODE OCCURRENCES -----
-Identifiers: 8
+Identifiers: 9
 inteiro: 6
-decimal: 0
+decimal: 1
 texto: 0
 texto: 0
 saida: 1
@@ -21,7 +21,9 @@ senao: 0
 '}': 1
 'real': 0
 'barça': 0
-Short identifiers 4
+Short identifiers 5
 
+Warning: t Identifier too short. Short identifiers may reduce code readability and maintainability. Consider using a more descriptive identifier.
 Warning: i Identifier too short. Short identifiers may reduce code readability and maintainability. Consider using a more descriptive identifier.
-------------------------------------------------------------------
+Current code has 7 lines and 122 characters.
+---------------------------------

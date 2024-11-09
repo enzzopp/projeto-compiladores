@@ -1,5 +1,5 @@
 inteiro teste = 2 + 2;
-
+decimal t = 2.2;
 para (inteiro i = 0; i < 10; i = i + 1) {
     teste = teste + 1;
 }

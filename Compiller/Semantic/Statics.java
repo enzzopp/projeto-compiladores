@@ -13,7 +13,7 @@ public class Statics {
     private List<Token> listTokens;
     private StringBuilder statics = new StringBuilder();
     private List<String> smallIds = new ArrayList<>();
-
+    
     public Statics(List <Token> listTokens){
         this.listTokens = listTokens;
     }
@@ -178,10 +178,10 @@ public class Statics {
         for (Token token : listTokens){
             smallWords(token);
         }
-        statics.append("---------------------------------");
+        String caracters = countCaracters("code");
 
-        // String osInfo = printOSInfo();
-        // statics.append(osInfo);
+        
+        statics.append(caracters);
         statics.append("---------------------------------");
 
         try (FileWriter writer = new FileWriter(path)){
@@ -191,7 +191,7 @@ public class Statics {
         }
     }
 
-    public void countCaracters(String path){
+    public String countCaracters(String path){
         System.out.println();
         File file = new File(path);
         StringBuilder contents = new StringBuilder();
@@ -201,12 +201,12 @@ public class Statics {
                 countLines++;
                 contents.append(scanner.nextLine());
                 contents.append("\n");
-            }
-            // System.out.print("Current code has " + countLines + " lines and " + contents.length() + " characters.\n");
-            
+            } 
+            return ("Current code has " + countLines + " lines and " + contents.length() + " characters.\n");
         }catch(FileNotFoundException e){
             System.out.println("File not found: " + e.getMessage());
         }
+        return "";
     }
 
     public List<Token> getListTokens() {
