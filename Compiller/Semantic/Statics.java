@@ -1,7 +1,9 @@
+package Compiller.Semantic;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import Compiller.Lexic.Token;
@@ -10,6 +12,7 @@ public class Statics {
 
     private List<Token> listTokens;
     private StringBuilder statics = new StringBuilder();
+    private List<String> smallIds = new ArrayList<>();
 
     public Statics(List <Token> listTokens){
         this.listTokens = listTokens;
@@ -34,6 +37,8 @@ public class Statics {
         int amountCP = 0;
         int amountOB = 0;
         int amountCB = 0;
+        int amountIF = 0;
+        int amountELSE = 0;
         int smallIds = 0;
 
         for (Token token : listTokens) {
@@ -89,6 +94,12 @@ public class Statics {
             else if(token.getType().equals("CB")){
                 amountCB++;
             }
+            else if(token.getLexeme().equals("se")){
+                amountIF++;
+            }
+            else if(token.getType().equals("senao")){
+                amountELSE++;
+            }
             else if(token.getLexeme().equals("real")){
                 amountTRUE++;
             }
@@ -122,35 +133,41 @@ public class Statics {
 
 
         return(
-            ("----- ESTATÍSTICAS DO CÓDIGO -----\n") +
-            ("Quantidade de ID: " + amountID + "\n") +
-            ("Quantidade de inteiros: " + amountINT + "\n") +
-            ("Quantidade de decimal: " + amountFLOAT + "\n") +
-            ("Quantidade de texto: " + amountSTRING + "\n") +
-            ("Quantidade de saida: " + amountPRINTS + "\n") +
-            ("Quantidade de entrada: " + amountINPUTS + "\n") +
-            ("Quantidade de para: " + amountFOR + "\n") +
-            ("Quantidade de enquanto: " + amountWHILE + "\n") +
-            ("Quantidade de '+': " + amountPLUS + "\n") +
-            ("Quantidade de '-': " + amountSUB + "\n") +
-            ("Quantidade de '*': " + amountMUL + "\n") +
-            ("Quantidade de '/': " + amountDIV + "\n") +
-            ("Quantidade de '(': " + amountOP + "\n") +
-            ("Quantidade de ')': " + amountCP + "\n") +
-            ("Quantidade de '{': " + amountOB + "\n") +
-            ("Quantidade de '}': " + amountCB + "\n") +
-            ("Quantidade de 'real': " + amountTRUE + "\n") +
-            ("Quantidade de 'barça': " + amountFALSE + "\n") +
-            ("Quantidade de '}': " + amountCB + "\n") +
-            ("Quantidade de palavaras com tamanho menor ou igual a 4: " + smallIds + "\n")
+            ("----- CODE OCCURRENCES -----\n") +
+            ("Identifiers: " + amountID + "\n") +
+            ("inteiro: " + amountINT + "\n") +
+            ("decimal: " + amountFLOAT + "\n") +
+            ("texto: " + amountSTRING + "\n") +
+            ("texto: " + amountSTRING + "\n") +
+            ("saida: " + amountPRINTS + "\n") +
+            ("entrada: " + amountINPUTS + "\n") +
+            ("para: " + amountFOR + "\n") +
+            ("enquanto: " + amountWHILE + "\n") +
+            ("se: " + amountIF + "\n") +
+            ("senao: " + amountELSE + "\n") +
+            ("'+': " + amountPLUS + "\n") +
+            ("'-': " + amountSUB + "\n") +
+            ("'*': " + amountMUL + "\n") +
+            ("'/': " + amountDIV + "\n") +
+            ("'(': " + amountOP + "\n") +
+            ("')': " + amountCP + "\n") +
+            ("'{': " + amountOB + "\n") +
+            ("'}': " + amountCB + "\n") +
+            ("'}': " + amountCB + "\n") +
+            ("'real': " + amountTRUE + "\n") +
+            ("'barça': " + amountFALSE + "\n") +
+            ("Short identifiers " + smallIds + "\n")
         );
         
     }
 
-    public void smallWords(Token words , int len){
-        if(words.getType().equals("ID") && words.getLexeme().length() <= len){
-            statics.append("AVISO: " + words.getLexeme() +" ESCREVA UM IDENTIFICADOR COM UM NÚMERO MAIOR DE CARACTERES\n");
-            System.out.println("\033[0;33m AVISO: " + words.getLexeme() +"\033[0m ESCREVA UM IDENTIFICADOR COM UM NÚMERO MAIOR DE CARACTERES");
+    public void smallWords(Token words){
+        if(words.getType().equals("ID") && words.getLexeme().length() <= 4){
+            if (!smallIds.contains(words.getLexeme())){
+                smallIds.add(words.getLexeme());
+                statics.append("Warning: " + words.getLexeme() +" Identifier too short. Short identifiers may reduce code readability and maintainability. Consider using a more descriptive identifier.\n");
+                System.out.println("\033[0;33m Warning:\033[0m " + words.getLexeme() +" Identifier too short. Short identifiers may reduce code readability and maintainability. Consider using a more descriptive identifier.\n");
+            }
         }
     }
 
@@ -159,14 +176,18 @@ public class Statics {
         statics.append(qtds + "\n");
 
         for (Token token : listTokens){
-            smallWords(token, 4);
+            smallWords(token);
         }
+        statics.append("---------------------------------");
+
+        // String osInfo = printOSInfo();
+        // statics.append(osInfo);
         statics.append("---------------------------------");
 
         try (FileWriter writer = new FileWriter(path)){
             writer.write(statics.toString());
         } catch (IOException e) {
-            System.err.println("ERRO ao escrever no arquivo: " + e.getMessage());
+            System.err.println("ERROR while writing to file: " + e.getMessage());
         }
     }
 
@@ -181,10 +202,10 @@ public class Statics {
                 contents.append(scanner.nextLine());
                 contents.append("\n");
             }
-            System.out.print(contents.toString() +"O código apresenta : " + contents.length() + " caracteres e " + countLines + " linhas.");
+            // System.out.print("Current code has " + countLines + " lines and " + contents.length() + " characters.\n");
             
         }catch(FileNotFoundException e){
-            System.out.println("Arquivo não encontrado " + e.getMessage());
+            System.out.println("File not found: " + e.getMessage());
         }
     }
 

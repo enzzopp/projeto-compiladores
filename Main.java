@@ -8,6 +8,7 @@ import Compiller.Lexic.Token;
 import Compiller.Syntactic.ParserJava;
 import Compiller.Syntactic.ParserCpp;
 import Compiller.Semantic.Semantic;
+import Compiller.Semantic.Statics;
 
 public class Main {
 
@@ -32,7 +33,7 @@ public class Main {
         List<Token> tokens;
         List<Token> tokensSemantic;
         
-        String path = "resources/code";
+        String path = "" + args[1];
 
         Code f1 = new Code(path);
         
@@ -49,10 +50,7 @@ public class Main {
         }
 
         
-        System.out.println(s.amountTypeTokens(tokensSemantic));
-        
-        s.createStaticFile("resources/Statics");
-        System.out.println("---------------------------------");
+        s.createStaticFile("resources/Statics.txt");
 
         boolean isCorrect = false;
         
@@ -65,7 +63,7 @@ public class Main {
 
             if (isCorrect) {
                 createJavaTranslateFile("resources/JavaTranslate.java", parser.getCode());
-                s.countCaracters("resources/code");
+                s.countCaracters(path);
                 
             }
         }

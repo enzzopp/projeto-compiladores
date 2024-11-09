@@ -1,0 +1,27 @@
+----- CODE OCCURRENCES -----
+Identifiers: 8
+inteiro: 6
+decimal: 0
+texto: 0
+texto: 0
+saida: 1
+entrada: 0
+para: 1
+enquanto: 0
+se: 0
+senao: 0
+'+': 3
+'-': 0
+'*': 0
+'/': 0
+'(': 2
+')': 2
+'{': 1
+'}': 1
+'}': 1
+'real': 0
+'barça': 0
+Short identifiers 4
+
+Warning: i Identifier too short. Short identifiers may reduce code readability and maintainability. Consider using a more descriptive identifier.
+------------------------------------------------------------------
