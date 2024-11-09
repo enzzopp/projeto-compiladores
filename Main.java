@@ -48,11 +48,12 @@ public class Main {
             tokensSemantic.add(tokenSemantic);
         }
 
-        for (Token token : tokensSemantic) {
-            // System.out.println(token);
-        }
+        
+        System.out.println(s.amountTypeTokens(tokensSemantic));
+        
+        s.createStaticFile("resources/Statics");
+        System.out.println("---------------------------------");
 
-        s.amountTypeTokens(tokensSemantic);
         boolean isCorrect = false;
         
         if (args.length > 0 && args[0].equals("-j")) {

@@ -1,4 +1,3 @@
-
 inteiro a = entrada();
 decimal b = entrada();
 texto k = entrada();
@@ -8,7 +7,7 @@ texto teste3 = "testando";
 
 para (inteiro i = 0; i < 5; i = i + 1) {
     saida("Iteração número: ");
-    saida(k);
+    saida(i);
 }
 
 saida(k);
