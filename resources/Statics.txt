@@ -1,29 +1,29 @@
 ----- CODE OCCURRENCES -----
-Identifiers: 9
-inteiro: 6
+Identifiers: 2
+inteiro: 2
 decimal: 1
 texto: 0
 texto: 0
-saida: 1
+saida: 0
 entrada: 0
-para: 1
+para: 0
 enquanto: 0
 se: 0
 senao: 0
-'+': 3
+'+': 1
 '-': 0
 '*': 0
 '/': 0
-'(': 2
-')': 2
-'{': 1
-'}': 1
-'}': 1
+'(': 0
+')': 0
+'{': 0
+'}': 0
+'}': 0
 'real': 0
 'barça': 0
-Short identifiers 5
+';': 2
+Short identifiers: 1
 
 Warning: t Identifier too short. Short identifiers may reduce code readability and maintainability. Consider using a more descriptive identifier.
-Warning: i Identifier too short. Short identifiers may reduce code readability and maintainability. Consider using a more descriptive identifier.
-Current code has 7 lines and 122 characters.
+Current code has 2 lines and 40 characters.
 ---------------------------------

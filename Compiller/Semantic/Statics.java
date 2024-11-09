@@ -13,6 +13,8 @@ public class Statics {
     private List<Token> listTokens;
     private StringBuilder statics = new StringBuilder();
     private List<String> smallIds = new ArrayList<>();
+
+    Semantic semantic = new Semantic(listTokens);
     
     public Statics(List <Token> listTokens){
         this.listTokens = listTokens;
@@ -39,6 +41,7 @@ public class Statics {
         int amountCB = 0;
         int amountIF = 0;
         int amountELSE = 0;
+        int amountEndOfLine = 0;
         int smallIds = 0;
 
         for (Token token : listTokens) {
@@ -106,6 +109,9 @@ public class Statics {
             else if(token.getLexeme().equals("barça")){
                 amountFALSE++;
             }
+            else if(token.getLexeme().equals(";")){
+                amountEndOfLine++;
+            }
         }
 
         // System.out.println("----- ESTATÍSTICAS DO CÓDIGO -----");
@@ -156,7 +162,8 @@ public class Statics {
             ("'}': " + amountCB + "\n") +
             ("'real': " + amountTRUE + "\n") +
             ("'barça': " + amountFALSE + "\n") +
-            ("Short identifiers " + smallIds + "\n")
+            ("';': " + (amountEndOfLine - 1) + "\n") +
+            ("Short identifiers: " + smallIds + "\n")
         );
         
     }
@@ -179,8 +186,6 @@ public class Statics {
             smallWords(token);
         }
         String caracters = countCaracters("code");
-
-        
         statics.append(caracters);
         statics.append("---------------------------------");
 
