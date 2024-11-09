@@ -52,6 +52,7 @@ public class Main {
             // System.out.println(token);
         }
 
+        s.amountTypeTokens(tokensSemantic);
         boolean isCorrect = false;
         
         if (args.length > 0 && args[0].equals("-j")) {

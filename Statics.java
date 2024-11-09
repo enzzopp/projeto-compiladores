@@ -12,6 +12,71 @@ public class Statics {
         this.listTokens = listTokens;
     }
 
+    public void amountTypeTokens(List <Token> listTokens){
+        int amountINT = 0;
+        int amountFLOAT = 0;
+        int amountSTRING = 0;
+        int amountPRINTS = 0;
+        int amountINPUTS = 0;
+        int amountFOR = 0;
+        int amountWHILE = 0;
+        int amountOP = 0;
+        int amountCP = 0;
+        int amountOB = 0;
+        int amountCB = 0;
+        
+        for (Token token : listTokens) {
+            if (token.getType().equals("INT")) {
+                amountINT ++;
+            }
+            else if(token.getType().equals("FLOAT")){
+                amountFLOAT++;
+            }
+            else if(token.getType().equals("TXT")){
+                amountSTRING++;
+            }
+            else if(token.getLexeme().equals("saida")){
+                amountPRINTS++;
+            }
+            else if(token.getLexeme().equals("entrada")){
+                amountINPUTS++;
+            }
+            else if(token.getLexeme().equals("para")){
+                amountFOR++;
+            }
+            else if(token.getLexeme().equals("enquanto")){
+                amountWHILE++;
+            }
+            else if(token.getType().equals("OP")){
+                amountOP++;
+            }
+            else if(token.getType().equals("CP")){
+                amountCP++;
+            }
+            else if(token.getType().equals("OB")){
+                amountOB++;
+            }
+            else if(token.getType().equals("CB")){
+                amountCB++;
+            }
+        }
+
+        System.out.println("----- ESTATÍSTICAS DO CÓDIGO -----");
+
+        System.out.println("Quantidade de inteiros: " + amountINT);
+        System.out.println("Quantidade de floats: " + amountFLOAT);
+        System.out.println("Quantidade de strings: " + amountSTRING);
+        System.out.println("Quantidade de prints: " + amountPRINTS);
+        System.out.println("Quantidade de inputs: " + amountINPUTS);
+        System.out.println("Quantidade de for: " + amountFOR);
+        System.out.println("Quantidade de while: " + amountWHILE);
+        System.out.println("Quantidade de '(': " + amountOP);
+        System.out.println("Quantidade de ')': " + amountCP);
+        System.out.println("Quantidade de '{': " + amountOB);
+        System.out.println("Quantidade de '}': " + amountCB);
+        System.out.println("---------------------------------");
+    }
+
     public void countCaracters(String path){
         File file = new File(path);
         StringBuilder contents = new StringBuilder();
