@@ -1,5 +1,7 @@
 find $pwd -type f -name "*.class" -exec rm -f {} \;
 find $pwd -type f -name CppTranslate -exec rm -f {} \;
+find $pwd -type f -name JavaTranslate.java -exec rm -f {} \;
+find $pwd -type f -name CppTranslate.cpp -exec rm -f {} \;
 
 javac *.java
 
@@ -17,14 +19,12 @@ case "$1" in
         java Main $1 $2
         cd resources/
         javac JavaTranslate.java
-        rm -f JavaTranslate.java
         java JavaTranslate
         ;;
     -c)
         java Main $1 $2
         cd resources/
         g++ CppTranslate.cpp -o CppTranslate
-        rm -f CppTranslate.cpp
         ./CppTranslate
         ;;
     *)

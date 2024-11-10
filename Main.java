@@ -50,7 +50,7 @@ public class Main {
         }
 
         
-        s.createStaticFile("resources/Statics.txt");
+        s.createStaticFile("Statics.txt");
 
         boolean isCorrect = false;
         

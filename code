@@ -1,2 +1,9 @@
-inteiro teste = 2 + 2;
-decimal t = 2.2;
+decimal i = 100;
+decimal a = 0.0;
+
+enquanto (i != 0) {
+    a = a + 1.0;
+    i = i - 1;
+}
+
+saida(a);

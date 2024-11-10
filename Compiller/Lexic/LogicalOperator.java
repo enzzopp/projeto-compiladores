@@ -22,6 +22,10 @@ public class LogicalOperator extends AFD {
                 return null;
             case '!' :
                 code.next();
+                if (code.current() == '='){
+                    code.next();
+                    return new Token("NE", "!=", line);
+                }
                 return new Token("NOT", "!", line);
             case '<' :
                 code.next();

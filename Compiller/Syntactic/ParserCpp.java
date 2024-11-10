@@ -795,7 +795,7 @@ public class ParserCpp {
         else if (matchType("ID" , currentToken.getLexeme())) {
             return true;
         }
-        else if (NUMI()) {
+        else if (NUM()) {
             return true;
         }
         error("ID or inteiro", currentToken);
